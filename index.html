@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fluxo Studio v2 — AI Creative Suite (by Abhi)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071224; --panel:rgba(255,255,255,0.04);
+    --glass: rgba(255,255,255,0.03);
+    --accent:#ff6b9a; --accent2:#8b5cf6;
+    --muted:#94a3b8; --white: #eaf6ff;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,var(--bg),#051126);color:var(--white);-webkit-font-smoothing:antialiased}
+  header{display:flex;align-items:center;gap:16px;padding:20px 28px}
+  .logo{display:flex;flex-direction:column}
+  .brand{font-weight:800;letter-spacing:0.6px;font-size:20px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+  .tag{color:var(--muted);font-size:12px}
+  .container{max-width:1200px;margin:16px auto;padding:18px;display:grid;grid-template-columns:420px 1fr;gap:20px}
+  .panel{background:var(--panel);border-radius:var(--radius);padding:16px;box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.02)}
+  /* left toolbox */
+  .toolbox h3{margin:0 0 8px;font-size:15px}
+  .controls{display:flex;flex-direction:column;gap:10px}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#051025;font-weight:700;cursor:pointer;border:none;box-shadow:0 8px 20px rgba(139,92,246,0.12)}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--white);box-shadow:none}
+  .small{padding:8px 10px;font-size:14px}
+  input[type=file]{display:none}
+  .template-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .tpl{width:56px;height:40px;border-radius:8px;background:linear-gradient(135deg,#fff1,#0001);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--white);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+  .row{display:flex;gap:8px;align-items:center}
+  .muted{color:var(--muted);font-size:13px}
+  .slider{width:100%}
+  /* canvas area */
+  .stage{display:flex;flex-direction:column;gap:12px}
+  .canvas-wrap{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:10px;padding:14px;display:flex;justify-content:center;align-items:center;min-height:540px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}
+  canvas#work{background:#0b1220;border-radius:6px;max-width:100%;height:auto;display:block}
+  .layer-list{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .layer-pill{background:var(--glass);padding:8px 10px;border-radius:999px;font-size:13px;color:var(--white);border:1px solid rgba(255,255,255,0.02)}
+  .footer-note{font-size:13px;color:var(--muted);margin-top:8px}
+  /* status */
+  .status-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.015),transparent);font-size:13px;color:var(--muted)}
+  .spinner{width:14px;height:14px;border-radius:50%;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 0 10px var(--accent);animation:spin 1s linear infinite}
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  /* mobile adjustments */
+  @media(max-width:980px){
+    .container{grid-template-columns:1fr; padding:12px}
+    .canvas-wrap{min-height:420px}
+  }
+  /* top-right mini actions */
+  .top-actions{display:flex;gap:8px;align-items:center}
+  .chip{padding:6px 10px;border-radius:10px;background:rgba(255,255,255,0.02);font-weight:600;font-size:13px}
+  /* draggable text styles preview */
+  .txt-input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--white)}
+  .filter-preview{display:flex;gap:8px;align-items:center;margin-top:8px}
+  /* export button */
+  .export-btn{background:linear-gradient(90deg,#2dd4bf,#06b6d4);color:#022; padding:10px 14px;border-radius:10px;font-weight:700}
+  footer.site{margin:24px auto;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="brand">Fluxo Studio v2</div>
+    <div class="tag">AI Creative Suite — Crafted with 💖 by Abhi</div>
+  </div>
+  <div style="flex:1"></div>
+  <div class="top-actions">
+    <div class="chip" id="ai-status">AI: idle</div>
+    <button class="btn small" id="btn-help">Help</button>
+  </div>
+</header>
+
+<div class="container">
+  <!-- LEFT PANEL: tools -->
+  <div class="panel toolbox">
+    <h3>1 • Assets & Templates</h3>
+    <div class="controls">
+      <label class="btn small" for="file-input">⬆️ Upload image</label>
+      <input id="file-input" type="file" accept="image/*">
+      <div class="row">
+        <button class="btn ghost small" id="btn-camera">📷 Sample 1</button>
+        <button class="btn ghost small" id="btn-camera2">📷 Sample 2</button>
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="muted">Quick templates</div>
+        <div class="template-grid">
+          <div class="tpl" data-template="pink">P</div>
+          <div class="tpl" data-template="dark">D</div>
+          <div class="tpl" data-template="retro">R</div>
+          <div class="tpl" data-template="minimal">M</div>
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
+
+    <h3>2 • Text Layers</h3>
+    <div>
+      <input id="text-content" class="txt-input" placeholder="Write caption / headline..." />
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <select id="font-size" class="txt-input" style="width:35%;">
+          <option value="24">24px</option><option value="32" selected>32px</option><option value="48">48px</option><option value="64">64px</option>
+        </select>
+        <input id="color-picker" type="color" value="#ffffff" style="height:44px;border-radius:8px;border:none;background:#fff"/>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn small" id="add-text">➕ Add Text</button>
+        <button class="btn small ghost" id="clear-text">🧹 Clear Texts</button>
+      </div>
+      <div class="footer-note">Drag text on canvas to position. Click a layer pill to edit.</div>
+      <div class="layer-list" id="layer-list"></div>
+    </div>
+
+    <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
+
+    <h3>3 • AI Caption & Voice</h3>
+    <div class="row" style="align-items:center;">
+      <button class="btn" id="ai-caption">🤖 AI Caption</button>
+      <button class="btn small" id="voice-btn" title="Use voice to instruct AI">🎙️ Voice</button>
+    </div>
+    <div style="margin-top:8px">
+      <div class="status-bar" id="ai-bar">Ready — click AI Caption to generate a caption for the image</div>
+    </div>
+
+    <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
+
+    <h3>4 • Filters & Export</h3>
+    <div class="filter-preview">
+      <label class="muted">Filter</label>
+      <select id="filter-select" class="txt-input" style="width:60%">
+        <option value="none">None</option>
+        <option value="grayscale">Grayscale</option>
+        <option value="warm">Warm</option>
+        <option value="contrast">High Contrast</option>
+      </select>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="export-btn" id="export-btn">⬇️ Export PNG</button>
+      <button class="btn small ghost" id="download-layers">📁 Download JSON</button>
+    </div>
+
+    <div style="height:8px"></div>
+    <div class="footer-note">Pro tip: Use voice → AI to get diverse captions, then tweak text position and font size.</div>
+  </div>
+
+  <!-- RIGHT PANEL: canvas -->
+  <div class="panel stage">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="muted">Canvas — compose your meme / post</div>
+      <div class="row">
+        <div class="muted" id="canvas-dim">—</div>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="work" width="1000" height="600"></canvas>
+      <!-- overlay helper for dragging -->
+      <div id="overlay" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div class="layer-pill" id="count-pill">Layers: 0</div>
+        <div style="display:inline-block;width:8px"></div>
+        <div class="chip" id="ai-activity">AI idle</div>
+      </div>
+      <div>
+        <button class="btn small ghost" id="undo-btn">↶ Undo</button>
+        <button class="btn small ghost" id="redo-btn">↷ Redo</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site">© 2025 Crafted with 💖 by Abhi — Fluxo Studio v2</footer>
+
+<script>
+/* ========== CONFIG ========== */
+const BACKEND = 'https://mindmirrorx-backend.onrender.com'; // <<-- your backend (already provided)
+const ANALYZE_PATH = '/analyze'; // POST { text?, context? } -> JSON { reply, score, color? }
+
+/* ========== STATE ========== */
+const canvas = document.getElementById('work');
+const ctx = canvas.getContext('2d');
+let baseImage = null;
+let layers = []; // {id, type:'text'|'image', text, x,y, size, color}
+let historyStack = [], redoStack = [];
+let isDragging = false, dragLayerId = null, dragOffset = {x:0,y:0};
+let overlay = document.getElementById('overlay');
+
+/* initial canvas size responsive */
+function fitCanvas(){
+  const wrap = canvas.parentElement;
+  const maxW = Math.min(1200, window.innerWidth - 520);
+  const w = Math.max(600, maxW);
+  const h = Math.round(w * 0.6);
+  canvas.width = w;
+  canvas.height = h;
+  document.getElementById('canvas-dim').textContent = `${w}×${h}`;
+  redraw();
+}
+window.addEventListener('resize', fitCanvas);
+fitCanvas();
+
+/* ========== helpers ========== */
+function pushHistory(){
+  historyStack.push(JSON.stringify(layers));
+  if(historyStack.length>40) historyStack.shift();
+  redoStack = [];
+  updateLayerCount();
+}
+function undo(){ if(!historyStack.length) return; redoStack.push(JSON.stringify(layers)); layers = JSON.parse(historyStack.pop()); updateLayerList(); redraw(); }
+function redo(){ if(!redoStack.length) return; historyStack.push(JSON.stringify(layers)); layers = JSON.parse(redoStack.pop()); updateLayerList(); redraw(); }
+function uid(){ return 'id_'+Math.random().toString(36).slice(2,9); }
+function updateLayerCount(){ document.getElementById('count-pill').textContent = 'Layers: '+layers.length; }
+function setAIStatus(s){ document.getElementById('ai-status').textContent = 'AI: '+s; document.getElementById('ai-activity').textContent = s; }
+
+/* ========== canvas draw ========== */
+function redraw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // background
+  ctx.fillStyle = '#071224';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  // image
+  if(baseImage){
+    // fit center & cover
+    const img = baseImage;
+    const scale = Math.max(canvas.width/img.width, canvas.height/img.height);
+    const iw = img.width * scale, ih = img.height * scale;
+    const ix = (canvas.width - iw)/2, iy = (canvas.height - ih)/2;
+    ctx.drawImage(img, ix, iy, iw, ih);
+  } else {
+    // subtle gradient when no image
+    const g = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+    g.addColorStop(0,'rgba(255,255,255,0.02)');
+    g.addColorStop(1,'rgba(255,255,255,0.00)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+  // apply filter
+  applyFilterVisual();
+
+  // draw text layers in order
+  layers.forEach(layer=>{
+    if(layer.type==='text'){
+      ctx.save();
+      ctx.font = `600 ${layer.size}px Inter, system-ui, sans-serif`;
+      ctx.fillStyle = layer.color || '#fff';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      // shadow
+      ctx.shadowColor = 'rgba(0,0,0,0.45)';
+      ctx.shadowBlur = 8;
+      ctx.fillText(layer.text, layer.x, layer.y);
+      ctx.restore();
+    }
+    // future: image layers
+  });
+}
+
+/* filter visual by reading select */
+function applyFilterVisual(){
+  const f = document.getElementById('filter-select').value;
+  // simple overlay effects
+  if(f==='grayscale'){
+    // quick desaturate overlay
+    ctx.fillStyle = 'rgba(255,255,255,0.0)';
+    // draw a transparent overlay & then canvas manipulation is heavier; for now tint
+    ctx.globalCompositeOperation = 'saturation';
+    ctx.globalCompositeOperation = 'source-over';
+  } else if(f==='warm'){
+    ctx.fillStyle = 'rgba(255,120,90,0.04)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  } else if(f==='contrast'){
+    ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+}
+
+/* ========== image upload / templates ========== */
+document.getElementById('file-input').addEventListener('change', async (e)=>{
+  const f = e.target.files[0]; if(!f) return;
+  const img = new Image();
+  img.onload = ()=>{ baseImage = img; pushHistory(); redraw(); };
+  img.src = URL.createObjectURL(f);
+});
+
+/* sample buttons */
+document.getElementById('btn-camera').addEventListener('click', ()=> loadSample('https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=1600&q=60'));
+document.getElementById('btn-camera2').addEventListener('click', ()=> loadSample('https://images.unsplash.com/photo-1523475496153-3d6cc6de158b?w=1600&q=60'));
+function loadSample(url){
+  const img = new Image(); img.crossOrigin='anonymous';
+  img.onload = ()=>{ baseImage = img; pushHistory(); redraw(); };
+  img.src = url;
+}
+
+/* templates */
+document.querySelectorAll('.tpl').forEach(t=>{
+  t.addEventListener('click', ()=> {
+    const key = t.dataset.template;
+    // simple template: create a colored background using baseImage fallback
+    if(key==='pink'){ // set gradient base via canvas
+      baseImage = null;
+      // draw gradient to a temporary canvas and use it as base
+      const tmp = document.createElement('canvas'); tmp.width=1200; tmp.height=720;
+      const c = tmp.getContext('2d'); const g = c.createLinearGradient(0,0,tmp.width,tmp.height);
+      g.addColorStop(0,'#ffe4f0'); g.addColorStop(1,'#ffd1ec');
+      c.fillStyle = g; c.fillRect(0,0,tmp.width,tmp.height);
+      imgFromCanvas(tmp).then(img=>{ baseImage=img; pushHistory(); redraw(); });
+    } else if(key==='dark'){
+      baseImage=null; const tmp=document.createElement('canvas'); tmp.width=1200;tmp.height=720;
+      const c=tmp.getContext('2d'); const g=c.createLinearGradient(0,0,tmp.width,tmp.height); g.addColorStop(0,'#0f1724'); g.addColorStop(1,'#071224'); c.fillStyle=g;c.fillRect(0,0,tmp.width,tmp.height);
+      imgFromCanvas(tmp).then(img=>{baseImage=img; pushHistory(); redraw();});
+    } else if(key==='retro'){
+      loadSample('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1600&q=60');
+    } else if(key==='minimal'){
+      baseImage=null; const tmp=document.createElement('canvas'); tmp.width=1200;tmp.height=720; const c=tmp.getContext('2d'); c.fillStyle='#f7f7f7'; c.fillRect(0,0,tmp.width,tmp.height);
+      imgFromCanvas(tmp).then(img=>{baseImage=img; pushHistory(); redraw();});
+    }
+  });
+}
+function imgFromCanvas(c){ return new Promise(r=>{ const img=new Image(); img.onload=()=>r(img); img.src=c.toDataURL('image/png'); }); }
+
+/* ========== layer management ========== */
+function renderLayerList(){
+  const list = document.getElementById('layer-list'); list.innerHTML='';
+  layers.forEach(l=>{
+    const d=document.createElement('div'); d.className='layer-pill'; d.textContent = l.text.slice(0,30) || 'Text';
+    d.onclick = ()=> editLayer(l.id);
+    list.appendChild(d);
+  });
+  updateLayerCount();
+}
+function editLayer(id){
+  const lay = layers.find(x=>x.id===id); if(!lay) return;
+  document.getElementById('text-content').value = lay.text;
+  document.getElementById('font-size').value = lay.size;
+  document.getElementById('color-picker').value = lay.color;
+  // allow user to update and add as new or move
+}
+document.getElementById('add-text').addEventListener('click', ()=>{
+  const txt = document.getElementById('text-content').value.trim(); if(!txt) return;
+  const size = parseInt(document.getElementById('font-size').value,10) || 32;
+  const color = document.getElementById('color-picker').value || '#fff';
+  const l = { id:uid(), type:'text', text:txt, x:40, y:40 + layers.length*48, size, color };
+  layers.push(l);
+  pushHistory(); renderLayerList(); redraw();
+});
+document.getElementById('clear-text').addEventListener('click', ()=>{ layers = layers.filter(l=>l.type!=='text'); pushHistory(); renderLayerList(); redraw(); });
+
+/* make canvas clickable and text draggable */
+canvas.addEventListener('mousedown', (e)=>{
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  // find topmost text layer under point (rough hit test)
+  for(let i=layers.length-1;i>=0;i--){
+    const L = layers[i];
+    if(L.type!=='text') continue;
+    const w = ctx.measureText(L.text).width, h = L.size;
+    if(mx >= L.x && mx <= L.x + w && my >= L.y && my <= L.y + h){
+      isDragging=true; dragLayerId=L.id; dragOffset.x = mx - L.x; dragOffset.y = my - L.y; canvas.style.cursor='grabbing'; return;
+    }
+  }
+});
+window.addEventListener('mousemove', (e)=>{
+  if(!isDragging) return;
+  const rect=canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const L = layers.find(x=>x.id===dragLayerId); if(!L) return;
+  L.x = Math.max(8, Math.min(mx - dragOffset.x, canvas.width - 20));
+  L.y = Math.max(8, Math.min(my - dragOffset.y, canvas.height - 20));
+  redraw();
+});
+window.addEventListener('mouseup', ()=>{ if(isDragging){ isDragging=false; dragLayerId=null; canvas.style.cursor='default'; pushHistory(); renderLayerList(); } });
+
+/* ========== AI caption integration ========== */
+const aiBtn = document.getElementById('ai-caption');
+const aiBar = document.getElementById('ai-bar');
+const voiceBtn = document.getElementById('voice-btn');
+
+async function generateAICaption(promptText=null){
+  setAIStatus('thinking...');
+  aiBar.innerHTML = '<div class="spinner"></div> Generating AI caption...';
+  const payload = { text: promptText || document.getElementById('text-content').value || '', context: { layers, hasImage: !!baseImage } };
+  // context is optional — backend can decide
+  try{
+    const controller = new AbortController();
+    const t = setTimeout(()=> controller.abort(), 12000); // 12s timeout
+    const res = await fetch(BACKEND + ANALYZE_PATH, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:controller.signal
+    });
+    clearTimeout(t);
+    if(!res.ok){ throw new Error('AI backend error '+res.status); }
+    const data = await res.json();
+    const reply = (data && (data.reply || data.caption)) || (typeof data === 'string' ? data : null);
+    if(!reply) throw new Error('empty reply');
+    onAIReply(reply, data);
+  }catch(err){
+    console.error('AI error',err);
+    // fallback: local caption generator
+    const fb = localCaptionGenerator(promptText || '');
+    onAIReply(fb, { fallback:true });
+    aiBar.textContent = 'Offline fallback used — AI not reachable';
+  } finally {
+    setAIStatus('idle');
+    setTimeout(()=> aiBar.textContent = 'Ready', 2000);
+  }
+}
+
+function onAIReply(reply, meta={}){
+  // speak it
+  speak(reply);
+  // add as a new text layer
+  const l = { id: uid(), type:'text', text: reply, x:40, y:40 + layers.length*48, size:48, color:'#ffffff' };
+  layers.push(l); pushHistory(); renderLayerList(); redraw();
+  // brief highlight
+  aiBar.innerHTML = (meta.fallback ? 'Fallback:' : 'AI:') + ' ' + (reply.length>90 ? reply.slice(0,90)+'…' : reply);
+}
+
+/* voice recog */
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recog = null;
+if(window.SpeechRecognition){
+  recog = new window.SpeechRecognition();
+  recog.lang = 'en-US';
+  recog.continuous = false;
+  recog.interimResults = false;
+  recog.onstart = ()=> setAIStatus('listening...');
+  recog.onresult = (ev)=> { const t = ev.results[0][0].transcript; generateAICaption(t); }
+  recog.onerror = e=> { console.warn('voice err',e); setAIStatus('idle'); aiBar.textContent = 'Voice error'; }
+  recog.onend = ()=> setAIStatus('idle');
+  voiceBtn.addEventListener('click', ()=> {
+    try{ recog.start(); } catch(e){ console.warn(e); aiBar.textContent='Voice start failed'; }
+  });
+} else {
+  voiceBtn.style.display='none';
+}
+
+/* speak using TTS */
+function speak(text){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate=1; u.pitch=1; u.lang='en-US';
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+}
+
+/* offline caption fallback (smart-ish) */
+function localCaptionGenerator(seed){
+  const seeds = [
+    "Soft chaos, big vibes ✨",
+    "Mood: cinematic + pastel energy 🎀",
+    "Quiet flex — keep them guessing.",
+    "Just vibes. Just mood. Repeat.",
+    "Sparking a little mischief today 🔥",
+    "Cute, chaotic, and caffeinated ☕️💫",
+    "Not sorry for glowing up ✨",
+    "Collect moments, not likes.",
+    "Low-key legendary, high-key chill.",
+    "Built this look from midnight code."
+  ];
+  // combine seed keywords
+  const s = (seed || '').toLowerCase();
+  for(const pick of seeds){
+    if(!layers.some(l=>l.text===pick)) return pick;
+  }
+  // fallback random
+  return seeds[Math.floor(Math.random()*seeds.length)];
+}
+
+/* wire AI button */
+aiBtn.addEventListener('click', ()=> generateAICaption());
+
+/* ========== export ========== */
+document.getElementById('export-btn').addEventListener('click', async ()=>{
+  // render final to temp canvas to allow high-res export
+  const tmp = document.createElement('canvas'); tmp.width=canvas.width; tmp.height=canvas.height; const tctx=tmp.getContext('2d');
+  // copy background (if base image exists scale it same as draw)
+  if(baseImage){
+    const img=baseImage; const scale = Math.max(tmp.width/img.width, tmp.height/img.height); const iw=img.width*scale, ih=img.height*scale; const ix=(tmp.width-iw)/2, iy=(tmp.height-ih)/2; tctx.drawImage(img,ix,iy,iw,ih);
+  } else {
+    const g = tctx.createLinearGradient(0,0,tmp.width,tmp.height); g.addColorStop(0,'#0b1220'); g.addColorStop(1,'#071224'); tctx.fillStyle=g; tctx.fillRect(0,0,tmp.width,tmp.height);
+  }
+  // apply filter same as view
+  if(document.getElementById('filter-select').value==='warm') tctx.fillStyle='rgba(255,120,90,0.04)', tctx.fillRect(0,0,tmp.width,tmp.height);
+  // draw layers
+  layers.forEach(L=>{
+    if(L.type==='text'){
+      tctx.save();
+      tctx.font = `600 ${L.size}px Inter, system-ui, sans-serif`;
+      tctx.fillStyle = L.color; tctx.textAlign='left'; tctx.textBaseline='top'; tctx.shadowColor='rgba(0,0,0,0.45)'; tctx.shadowBlur=8;
+      tctx.fillText(L.text, L.x, L.y);
+      tctx.restore();
+    }
+  });
+  // download
+  const a = document.createElement('a'); a.href = tmp.toDataURL('image/png'); a.download = 'fluxo_export.png'; a.click();
+});
+
+/* download layers JSON */
+document.getElementById('download-layers').addEventListener('click', ()=>{
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(layers, null, 2)],{type:'application/json'})); a.download = 'fluxo_layers.json'; a.click();
+});
+
+/* undo/redo */
+document.getElementById('undo-btn').addEventListener('click', undo);
+document.getElementById('redo-btn').addEventListener('click', redo);
+
+/* helpful: initial demo load */
+if(!localStorage.getItem('fluxo_seen_demo')){
+  localStorage.setItem('fluxo_seen_demo','1');
+  // quick demo text
+  layers.push({id:uid(),type:'text',text:'Crafted with 💖 by Abhi',x:40,y:canvas.height-90,size:28,color:'#ffffff'});
+  pushHistory(); renderLayerList(); redraw();
+}
+
+/* ========== utility: quick speak / help ========== */
+document.getElementById('btn-help').addEventListener('click', ()=>{
+  alert('Fluxo Studio v2 — Quick help:\\n• Upload an image, click AI Caption to auto-generate a caption (backend connected).\\n• Use voice button to speak a prompt for AI.\\n• Drag added text to position.\\n• Export PNG when finished.\\nEnjoy — Abhi ❤️');
+});
+
+/* ========== keyboard easter egg: press F for fancy caption ========= */
+window.addEventListener('keydown', (e)=>{
+  if(e.key==='f'){ generateAICaption('Make a fancy caption for this artful post'); }
+});
+
+/* ========== finish / UI sync ========== */
+function updateLayerList(){ renderLayerList(); updateLayerCount(); }
+updateLayerList();
+redraw();
+
+/* small helper to reflect changes when user changes filter or font size quickly */
+document.getElementById('filter-select').addEventListener('change', ()=>{ redraw(); });
+document.getElementById('font-size').addEventListener('change', ()=>{ /* nothing immediate */ });
+
+/* small: when user edits a layer via input & press Enter, update topmost layer */
+document.getElementById('text-content').addEventListener('keypress', (e)=>{ if(e.key==='Enter'){ document.getElementById('add-text').click(); e.preventDefault(); } });
+
+/* helpful: set AI ready label */
+aiBar.textContent = 'Ready — click AI Caption';
+setAIStatus('idle');
+
+</script>
+</body>
+</html>
