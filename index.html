@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fluxo — Brat-Only Deluxe ✦ Abhiii</title>
+
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- html2canvas for exporting -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card: rgba(255,255,255,0.03);
+      --muted:#94a3b8;
+      --accent:#5eead4;
+      --radius:14px;
+      --glass: rgba(255,255,255,0.02);
+      --text:#e6eef8;
+      --glass-strong: rgba(255,255,255,0.04);
+      --mac-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#071226,#091827);color:var(--text);-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    /* App layout */
+    .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:stretch;gap:18px;padding:20px 28px}
+    header.hero{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+    .brand{font-family:'Playfair Display',serif;font-size:24px;background:linear-gradient(90deg,#ff7ab6,#a78bfa);-webkit-background-clip:text;color:transparent}
+    .tag{color:var(--muted);font-size:13px}
+    .controls-top{display:flex;gap:12px;align-items:center}
+
+    /* Main area */
+    .main{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);padding:18px;box-shadow:var(--mac-shadow);border:1px solid rgba(255,255,255,0.03)}
+    .landing .lead{font-size:20px;color:#dff3ff;margin-bottom:6px}
+    .sublead{color:var(--muted);font-size:13px}
+
+    /* Brat Shell */
+    .brat-shell .brat-opening{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+    .brat-opening h3{margin:0;font-size:16px}
+    .brat-opening small{color:var(--muted)}
+
+    .brat-editor{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:12px}
+    .preview{height:420px;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}
+    #bratCanvas{max-width:100%;height:auto;display:block}
+
+    .controls{display:flex;flex-direction:column;gap:10px}
+    label{font-size:13px;color:var(--muted);margin-bottom:6px;display:block}
+    input[type="text"], select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);outline:none}
+    .swatches{display:flex;gap:8px;flex-wrap:wrap}
+    .swatch{width:36px;height:36px;border-radius:8px;cursor:pointer;border:2px solid rgba(255,255,255,0.03)}
+    .btn{background:linear-gradient(90deg,var(--accent),#a78bfa);border:none;color:#041025;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.35)}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);padding:9px 12px;border-radius:10px;cursor:pointer}
+    .small-btn{padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+
+    .studio{position:sticky;top:20px}
+    .studio .meta{display:flex;justify-content:space-between;align-items:center}
+    .layers{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    .muted{color:var(--muted)}
+    .tiny{font-size:12px}
+
+    footer.sitefoot{text-align:center;padding:20px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:20px;font-size:14px}
+
+    /* Top theme selector */
+    .theme-select{display:flex;gap:8px;align-items:center}
+    .theme-dot{width:28px;height:28px;border-radius:8px;cursor:pointer;border:2px solid rgba(255,255,255,0.02)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .main{grid-template-columns:1fr;gap:16px}
+      .brat-editor{grid-template-columns:1fr}
+      .studio{position:relative;top:auto}
+    }
+
+    /* UI small helpers */
+    .row{display:flex;gap:8px;align-items:center}
+    .right{margin-left:auto}
+    .status{font-size:13px;color:var(--muted)}
+    .pro-badge{background:linear-gradient(90deg,#f59e0b,#f97316);color:#041025;padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
+
+    /* Watermark display for export preview */
+    .watermark{position:absolute;right:18px;bottom:12px;opacity:0.9;color:rgba(255,255,255,0.75);font-weight:700;font-size:12px;padding:6px 10px;border-radius:8px;background:linear-gradient(90deg, rgba(0,0,0,0.2), rgba(255,255,255,0.02))}
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="brand">Fluxo <span style="font-size:12px;font-weight:400;color:var(--muted);margin-left:8px">✦ make your edits flowww</span></div>
+        <div class="tag muted">crafted with 💖 by Abhiii — for the meme geeks</div>
+      </div>
+
+      <div class="controls-top">
+        <div class="theme-select" title="Choose color theme (UI)">
+          <div class="muted tiny" style="margin-right:6px">UI</div>
+          <div class="theme-dot" style="background:linear-gradient(90deg,#ff7ab6,#ffb3d9)" data-theme="pink" aria-hidden></div>
+          <div class="theme-dot" style="background:linear-gradient(90deg,#34d399,#60a5fa)" data-theme="green" aria-hidden></div>
+          <div class="theme-dot" style="background:linear-gradient(90deg,#60a5fa,#a78bfa)" data-theme="dark" aria-hidden></div>
+          <div class="theme-dot" style="background:linear-gradient(90deg,#f59e0b,#f97316)" data-theme="gold" aria-hidden></div>
+        </div>
+        <button class="ghost" id="open-brat">Open Brat Lab</button>
+        <button class="btn" id="goto-studio">Brat Studio</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- LEFT -->
+      <div>
+        <div class="card landing">
+          <div class="lead">Fluxo — Brat Lab (Brat-only generator)</div>
+          <div class="sublead">Type a trendy brat line, pick fonts & backgrounds, toggle glow/outline/shadow, then export a clean screenshot. Free: 2 exports/day. Unlock Pro with password for unlimited exports & more.</div>
+        </div>
+
+        <div class="card brat-shell" id="brat-shell">
+          <div class="brat-opening" id="brat-opening">
+            <div>
+              <h3>Brat Generator Lab</h3>
+              <small class="muted">Animated opening, fonts, glow, export rules — click to open</small>
+            </div>
+            <div class="muted tiny">Click to open</div>
+          </div>
+
+          <div id="brat-editor" style="display:none; margin-top:12px;">
+            <div class="brat-editor">
+              <!-- Preview -->
+              <div>
+                <label class="muted tiny">Live Preview</label>
+                <div class="preview card" id="previewWrap" style="padding:0">
+                  <canvas id="bratCanvas" width="1200" height="600"></canvas>
+                  <div class="watermark" id="watermark">Fluxo ✦ Abhiii</div>
+                </div>
+
+                <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+                  <button class="small-btn" id="brat-random">Randomize</button>
+                  <button class="small-btn" id="brat-download">Generate Screenshot</button>
+                  <div class="muted tiny right">Exports left today: <span id="exports-left">—</span></div>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="controls card" style="padding:12px;box-shadow:none;">
+                <div>
+                  <label>Text</label>
+                  <input type="text" id="bratText" placeholder="Type your brat line — e.g. 'it’s giving main character vibes 💅'">
+                </div>
+
+                <div>
+                  <label>Font</label>
+                  <select id="bratFont">
+                    <option value="Poppins" selected>Poppins — modern</option>
+                    <option value="Playfair Display">Playfair Display — elegant</option>
+                    <option value="Montserrat">Montserrat — bold</option>
+                    <option value="Courier New">Mono — retro</option>
+                    <option value="Inter">Inter — clean</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label>Text size</label>
+                  <input type="range" id="bratSize" min="28" max="140" value="56">
+                </div>
+
+                <div>
+                  <label>Alignment</label>
+                  <select id="bratAlign">
+                    <option value="center">Center</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label>Color presets</label>
+                  <div class="swatches" id="bratColors">
+                    <div class="swatch" style="background:linear-gradient(90deg,#ff7ab6,#ffb3d9)" data-color="#ffe6f0" title="Pink"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#60a5fa,#a78bfa)" data-color="#e6f0ff" title="Blue"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#34d399,#6ee7b7)" data-color="#eafaf1" title="Green"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#ffd166,#ff9f1c)" data-color="#fff7e6" title="Yellow"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#ef4444,#f97316)" data-color="#ffecec" title="Red/Orange"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#0f172a,#1e293b)" data-color="#e6eef8" title="Dark"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#e5e7eb,#ffffff)" data-color="#ffffff" title="White"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#d8bfd8,#e6c4ff)" data-color="#f6e9ff" title="Violet"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <label>Background presets</label>
+                  <div class="swatches" id="bratBGs">
+                    <div class="swatch" style="background:#0b0b0b" data-bg="#0b0b0b" title="Black"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#fffaf0,#fff3e0)" data-bg="linear-gradient(90deg,#fffaf0,#fff3e0)" title="Cream"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#ffe6f0,#fff0f6)" data-bg="linear-gradient(90deg,#ffe6f0,#fff0f6)" title="Pink"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#e6f0ff,#eff6ff)" data-bg="linear-gradient(90deg,#e6f0ff,#eff6ff)" title="Blue"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#e9f9f0,#eafaf1)" data-bg="linear-gradient(90deg,#e9f9f0,#eafaf1)" title="Green"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#fff7e6,#fff3d6)" data-bg="linear-gradient(90deg,#fff7e6,#fff3d6)" title="Yellow"></div>
+                    <div class="swatch" style="background:linear-gradient(90deg,#161616,#0b0b0b)" data-bg="linear-gradient(90deg,#161616,#0b0b0b)" title="Dark Gradient"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <label>Effects</label>
+                  <div class="row">
+                    <label><input type="checkbox" id="bratGlow"> Glow</label>
+                    <label style="margin-left:8px"><input type="checkbox" id="bratOutline"> Outline</label>
+                    <label style="margin-left:8px"><input type="checkbox" id="bratShadow"> Shadow</label>
+                  </div>
+                </div>
+
+                <div>
+                  <label>Pro options</label>
+                  <div class="row">
+                    <button class="small-btn" id="openPro">Unlock Pro</button>
+                    <div class="muted tiny right">Pro unlock: <span id="pro-status">Locked</span></div>
+                  </div>
+                </div>
+
+                <div style="margin-top:auto">
+                  <label>Advanced</label>
+                  <div style="display:flex;gap:8px">
+                    <button class="small-btn" id="undoBtn">Undo</button>
+                    <button class="small-btn" id="redoBtn">Redo</button>
+                    <button class="small-btn" id="resetBtn">Reset</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">Fluxo Labs</div>
+              <div class="muted tiny">Pro features, local export, responsive UI — no backend required</div>
+            </div>
+            <div class="muted tiny">Version v10 Ultra</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Info / small studio panel -->
+      <aside class="card studio">
+        <div class="meta">
+          <div style="font-weight:700">Brat Studio</div>
+          <div class="muted tiny">Generate trendy text images — quick, pro-ready</div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div style="display:grid;gap:10px">
+          <div>
+            <div class="label">Export Quality</div>
+            <select id="exportQuality">
+              <option value="1">Standard (web)</option>
+              <option value="2">High (2×)</option>
+              <option value="4" selected>4K (4×) — Pro required for unlimited</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="label">Screenshot Mode</div>
+            <select id="exportMode">
+              <option value="with-watermark">With Watermark</option>
+              <option value="clean">Clean (no watermark)</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="label">Generation Limit (free)</div>
+            <div class="muted tiny">2 screenshots / day. Pro unlock removes limit.</div>
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <button class="btn" id="open-settings">Settings</button>
+            <button class="ghost" id="helpBtn">Help</button>
+          </div>
+
+          <div style="margin-top:12px">
+            <div style="font-weight:700">Shortcuts</div>
+            <div class="muted tiny">Randomize · Export · Unlock Pro</div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="sitefoot">crafted with 💖 by Abhiii for the meme geeks</footer>
+  </div>
+
+  <script>
+  /* Fluxo Brat-Only Deluxe — Single-file JS
+     Features implemented:
+     - Canvas rendering of text with effects
+     - Background & color presets
+     - Randomize, Undo/Redo, Reset
+     - Export behavior: hide UI and capture clean image
+     - Export limit (2/day) for free users, unlimited when Pro unlocked with password ABHIJEET0123
+     - Pro features: custom color pickers, animated glow background toggle, 4x export scaling
+     - localStorage persistence for pro/unlock and exported count (daily reset)
+  */
+
+  // ---- Constants ----
+  const PRO_PASSWORD = "ABHIJEET0123";
+  const FREE_EXPORTS_PER_DAY = 2;
+  const LS_KEY = "fluxo_state_v1";
+
+  // ---- DOM refs ----
+  const bratOpening = document.getElementById('brat-opening');
+  const bratEditor = document.getElementById('brat-editor');
+  const bratCanvas = document.getElementById('bratCanvas');
+  const bCtx = bratCanvas.getContext('2d');
+  const bratText = document.getElementById('bratText');
+  const bratFont = document.getElementById('bratFont');
+  const bratSize = document.getElementById('bratSize');
+  const bratAlign = document.getElementById('bratAlign');
+  const bratColors = document.getElementById('bratColors');
+  const bratBGs = document.getElementById('bratBGs');
+  const bratGlow = document.getElementById('bratGlow');
+  const bratOutline = document.getElementById('bratOutline');
+  const bratShadow = document.getElementById('bratShadow');
+  const bratRandom = document.getElementById('brat-random');
+  const bratDownload = document.getElementById('brat-download');
+  const exportQuality = document.getElementById('exportQuality');
+  const exportMode = document.getElementById('exportMode');
+  const proStatusEl = document.getElementById('pro-status');
+  const openProBtn = document.getElementById('openPro');
+  const exportsLeftEl = document.getElementById('exports-left');
+  const watermarkEl = document.getElementById('watermark');
+  const undoBtn = document.getElementById('undoBtn');
+  const redoBtn = document.getElementById('redoBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  // Theme dots
+  document.querySelectorAll('.theme-dot').forEach(d=>{
+    d.addEventListener('click', ()=> {
+      const t = d.dataset.theme;
+      switch(t){
+        case 'pink': document.documentElement.style.setProperty('--accent', '#ff7ab6'); document.documentElement.style.setProperty('--accent2', '#ffb3d9'); break;
+        case 'green': document.documentElement.style.setProperty('--accent', '#34d399'); document.documentElement.style.setProperty('--accent2', '#60a5fa'); break;
+        case 'gold': document.documentElement.style.setProperty('--accent', '#f59e0b'); document.documentElement.style.setProperty('--accent2', '#f97316'); break;
+        default: document.documentElement.style.setProperty('--accent', '#60a5fa'); document.documentElement.style.setProperty('--accent2', '#a78bfa');
+      }
+    });
+  });
+
+  // ---- state & undo/redo stack ----
+  let state = {
+    pro: false,
+    exportsToday: 0,
+    exportsDate: (new Date()).toISOString().slice(0,10),
+    text: "it’s giving main character vibes 💅",
+    font: "Poppins",
+    size: 56,
+    align: "center",
+    color: "#ffe6f0",
+    bg: "linear-gradient(90deg,#fff3f8,#ffe6f0)",
+    glow: false,
+    outline: false,
+    shadow: false
+  };
+
+  let undoStack = [], redoStack = [];
+
+  function pushUndo() {
+    undoStack.push(JSON.stringify(state));
+    if (undoStack.length > 50) undoStack.shift();
+    redoStack = [];
+  }
+  function doUndo() {
+    if (!undoStack.length) return;
+    redoStack.push(JSON.stringify(state));
+    const prev = JSON.parse(undoStack.pop());
+    state = prev;
+    applyStateToUI();
+    renderCanvas();
+  }
+  function doRedo() {
+    if (!redoStack.length) return;
+    undoStack.push(JSON.stringify(state));
+    const next = JSON.parse(redoStack.pop());
+    state = next;
+    applyStateToUI();
+    renderCanvas();
+  }
+
+  // ---- load/save localStorage ----
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(raw){
+        const saved = JSON.parse(raw);
+        // daily reset of exports
+        const today = (new Date()).toISOString().slice(0,10);
+        if(saved.exportsDate !== today){
+          saved.exportsToday = 0;
+          saved.exportsDate = today;
+        }
+        state = {...state, ...saved};
+      }
+    }catch(e){}
+    applyStateToUI();
+  }
+  function saveState(){
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      pro: state.pro,
+      exportsToday: state.exportsToday,
+      exportsDate: state.exportsDate,
+      text: state.text,
+      font: state.font,
+      size: state.size,
+      align: state.align,
+      color: state.color,
+      bg: state.bg,
+      glow: state.glow,
+      outline: state.outline,
+      shadow: state.shadow
+    }));
+    updateExportsUI();
+  }
+
+  // ---- UI <-> state binding ----
+  function applyStateToUI(){
+    bratText.value = state.text;
+    bratFont.value = state.font;
+    bratSize.value = state.size;
+    bratAlign.value = state.align;
+    // update color swatches highlight
+    document.querySelectorAll('#bratColors .swatch').forEach(s=> s.style.outline = (s.dataset.color===state.color)?'3px solid rgba(255,255,255,0.12)':'none');
+    // background highlight
+    document.querySelectorAll('#bratBGs .swatch').forEach(s=> s.style.outline = (s.dataset.bg===state.bg)?'3px solid rgba(255,255,255,0.12)':'none');
+    bratGlow.checked = state.glow;
+    bratOutline.checked = state.outline;
+    bratShadow.checked = state.shadow;
+    proStatusEl.textContent = state.pro ? "Unlocked" : "Locked";
+    watermarkEl.style.display = (exportMode.value==="with-watermark") ? "block":"none";
+  }
+
+  // ---- render canvas ----
+  function renderCanvas(){
+    // canvas base size for screen preview (we use 1200x600)
+    const W = bratCanvas.width = 1200;
+    const H = bratCanvas.height = 600;
+    bCtx.clearRect(0,0,W,H);
+
+    // draw background (if it's a gradient string start with 'linear-gradient', we synthesize a gradient)
+    if(state.bg.startsWith('linear-gradient')){
+      // crude parse for two colors
+      const m = state.bg.match(/linear-gradient\(.*?,(.*?),(.*?)\)/);
+      let c1 = '#fff', c2 = '#eee';
+      if(m){
+        c1 = m[1].trim(); c2 = m[2].trim();
+      }
+      const g = bCtx.createLinearGradient(0,0,W,H);
+      g.addColorStop(0, c1);
+      g.addColorStop(1, c2);
+      bCtx.fillStyle = g;
+      bCtx.fillRect(0,0,W,H);
+    } else {
+      // solid bg
+      try { bCtx.fillStyle = state.bg; bCtx.fillRect(0,0,W,H); } catch(e) { bCtx.fillStyle = "#101010"; bCtx.fillRect(0,0,W,H); }
+    }
+
+    // optionally animated glow background (Pro only)
+    if(state.pro && state.animatedGlow && state.animatedGlowOn){
+      // simple radial overlay
+      const grd = bCtx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.7);
+      grd.addColorStop(0, hexToRgba(state.color,0.08));
+      grd.addColorStop(1, 'rgba(0,0,0,0)');
+      bCtx.fillStyle = grd;
+      bCtx.fillRect(0,0,W,H);
+    }
+
+    // draw text with effects
+    const txt = state.text || '';
+    // auto-fit: reduce font size until it fits (smart auto-fit)
+    let fontSize = Number(state.size) || 56;
+    const maxWidth = W - 160;
+    bCtx.textAlign = state.align === 'left' ? 'left' : state.align === 'right' ? 'right' : 'center';
+    bCtx.font = `${fontSize}px ${state.font}, Inter, Arial`;
+    // reduce font until fits (multi-line wrap)
+    const lines = wrapTextForCanvas(bCtx, txt, maxWidth, fontSize, state.font);
+    // compute y start
+    const lineHeight = Math.round(fontSize * 1.08);
+    const totalHeight = lines.length * lineHeight;
+    let startY = (H - totalHeight)/2 + Math.round(lineHeight*0.8);
+
+    // effect pre-draw: shadow/glow/outline
+    for(let i=0;i<lines.length;i++){
+      const line = lines[i];
+      const x = state.align === 'left' ? 80 : state.align === 'right' ? W-80 : W/2;
+      const y = startY + (i*lineHeight);
+
+      // outline
+      if(state.outline){
+        bCtx.lineWidth = Math.max(6, Math.round(fontSize/14));
+        bCtx.strokeStyle = hexToRgba('#000',0.35);
+        bCtx.strokeText(line, x, y);
+      }
+
+      // glow (soft)
+      if(state.glow){
+        const glowColor = state.color;
+        bCtx.shadowColor = glowColor;
+        bCtx.shadowBlur = Math.min(60, Math.round(fontSize/2));
+      } else {
+        bCtx.shadowBlur = 0;
+      }
+
+      // shadow
+      if(state.shadow){
+        bCtx.shadowColor = 'rgba(0,0,0,0.45)';
+        bCtx.shadowOffsetX = 0;
+        bCtx.shadowOffsetY = 8;
+      } else {
+        bCtx.shadowOffsetX = 0;
+        bCtx.shadowOffsetY = 0;
+      }
+
+      // fill
+      bCtx.fillStyle = state.color || '#ffffff';
+      bCtx.font = `${fontSize}px ${state.font}, Inter, Arial`;
+      bCtx.fillText(line, x, y);
+
+      // reset shadows
+      bCtx.shadowBlur = 0;
+      bCtx.shadowOffsetY = 0;
+    }
+  }
+
+  // Helpers: wrap text into multiple lines for canvas
+  function wrapTextForCanvas(ctx, text, maxWidth, baseSize, fontFamily){
+    // simple split by space, greedily build lines
+    ctx.font = `${baseSize}px ${fontFamily}, Inter, Arial`;
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+    for(let w of words){
+      const test = line ? (line + ' ' + w) : w;
+      const width = ctx.measureText(test).width;
+      if(width > maxWidth && line){
+        lines.push(line);
+        line = w;
+      } else {
+        line = test;
+      }
+    }
+    if(line) lines.push(line);
+    // if still too many lines, reduce font size a bit (handled by outer auto-fit loops if needed)
+    return lines;
+  }
+
+  // convert hex to rgba
+  function hexToRgba(hex, alpha=1){
+    const h = hex.replace('#','').trim();
+    if(h.length===3){ const r=h[0]+h[0], g=h[1]+h[1], b=h[2]+h[2]; return `rgba(${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)},${alpha})`; }
+    const r = parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  // ---- interactions binding ----
+  bratOpening.addEventListener('click', ()=>{
+    const shown = bratEditor.style.display !== 'none';
+    bratEditor.style.display = shown ? 'none' : 'block';
+    if(!shown){ pushUndo(); renderCanvas(); }
+  });
+
+  // color swatches
+  document.querySelectorAll('#bratColors .swatch').forEach(s=>{
+    s.addEventListener('click', ()=>{
+      pushUndo();
+      state.color = s.dataset.color || '#ffe6f0';
+      applyStateToUI();
+      renderCanvas();
+      saveState();
+    });
+  });
+
+  // bg swatches
+  document.querySelectorAll('#bratBGs .swatch').forEach(s=>{
+    s.addEventListener('click', ()=>{
+      pushUndo();
+      state.bg = s.dataset.bg || '#0b0b0b';
+      applyStateToUI();
+      renderCanvas();
+      saveState();
+    });
+  });
+
+  // text, font, size, align changes
+  bratText.addEventListener('input', ()=> { pushUndo(); state.text = bratText.value; renderCanvas(); saveState(); });
+  bratFont.addEventListener('change', ()=> { pushUndo(); state.font = bratFont.value; renderCanvas(); saveState(); });
+  bratSize.addEventListener('input', ()=> { pushUndo(); state.size = Number(bratSize.value); renderCanvas(); saveState(); });
+  bratAlign.addEventListener('change', ()=> { pushUndo(); state.align = bratAlign.value; renderCanvas(); saveState(); });
+
+  // effects
+  [bratGlow, bratOutline, bratShadow].forEach(el=> el.addEventListener('change', ()=>{
+    pushUndo();
+    state.glow = bratGlow.checked;
+    state.outline = bratOutline.checked;
+    state.shadow = bratShadow.checked;
+    renderCanvas(); saveState();
+  }));
+
+  // buttons
+  bratRandom.addEventListener('click', ()=>{
+    pushUndo();
+    randomizeState();
+    applyStateToUI();
+    renderCanvas();
+    saveState();
+  });
+
+  undoBtn.addEventListener('click', ()=> doUndo());
+  redoBtn.addEventListener('click', ()=> doRedo());
+  resetBtn.addEventListener('click', ()=> {
+    pushUndo();
+    state = {...state, text:"it’s giving main character vibes 💅", size:56, font:"Poppins", color:"#ffe6f0", bg:"linear-gradient(90deg,#fff3f8,#ffe6f0)", glow:false, outline:false, shadow:false};
+    applyStateToUI(); renderCanvas(); saveState();
+  });
+
+  // pro unlock
+  openProBtn.addEventListener('click', ()=>{
+    const pass = prompt("Enter Pro password to unlock Fluxo Pro — ask Abhii if you don't have it.");
+    if(pass === PRO_PASSWORD){
+      state.pro = true;
+      alert("Pro unlocked — enjoy unlimited exports & pro features!");
+      applyStateToUI();
+      saveState();
+    } else {
+      alert("Wrong password.");
+    }
+  });
+
+  // exports/day handling
+  function updateExportsUI(){
+    const today = (new Date()).toISOString().slice(0,10);
+    if(state.exportsDate !== today){
+      state.exportsDate = today;
+      state.exportsToday = 0;
+    }
+    const left = state.pro ? "∞" : Math.max(0, FREE_EXPORTS_PER_DAY - (state.exportsToday||0));
+    exportsLeftEl.textContent = left;
+    saveState();
+  }
+
+  // generate screenshot
+  bratDownload.addEventListener('click', async ()=> {
+    // enforce export limit
+    const today = (new Date()).toISOString().slice(0,10);
+    if(state.exportsDate !== today){ state.exportsToday = 0; state.exportsDate = today; }
+    if(!state.pro && (state.exportsToday >= FREE_EXPORTS_PER_DAY)){
+      const tryPass = confirm(`Free limit reached (${FREE_EXPORTS_PER_DAY}/day). Unlock Pro with password?`);
+      if(tryPass){ openProBtn.click(); }
+      return;
+    }
+
+    // hide UI for clean capture
+    const editorEl = document.getElementById('brat-editor');
+    const originalDisplay = editorEl.style.display;
+    // We create a clean clone container for capture (to ensure only preview captured)
+    const previewWrap = document.getElementById('previewWrap');
+    // Determine scale
+    const scale = Number(exportQuality.value) || 1;
+    const mode = exportMode.value || 'with-watermark';
+
+    // If mode is clean hide watermark temporarily
+    const originalWatermarkDisplay = watermarkEl.style.display;
+    if(mode === 'clean') watermarkEl.style.display = 'none';
+    // If Pro unlock required for high quality and not unlocked, downgrade
+    if(!state.pro && Number(scale) > 2){
+      alert("High quality export requires Pro unlock. Downgrading to 2× for free.");
+    }
+
+    // temporarily hide UI elements outside preview by overlaying a clean white/transparent page
+    try{
+      // make sure canvas is fully up-to-date
+      renderCanvas();
+
+      // Use html2canvas on previewWrap
+      const opts = {
+        scale: Math.min(state.pro ? scale : Math.min(scale,2), 4), // limit scale if not pro
+        useCORS: true,
+        backgroundColor: null,
+        logging: false
+      };
+      // Disable pointer events to avoid accidental overlays
+      document.body.style.pointerEvents = "none";
+      const canvasExport = await html2canvas(previewWrap, opts);
+      document.body.style.pointerEvents = "";
+
+      // create download link
+      const dataURL = canvasExport.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataURL;
+      const time = new Date().toISOString().replace(/[:.]/g,'-');
+      a.download = `fluxo-brat-${time}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      // increment exports counter
+      if(!state.pro){
+        state.exportsToday = (state.exportsToday || 0) + 1;
+        saveState();
+      }
+
+      alert("Generated! Check your downloads folder.");
+      updateExportsUI();
+    } catch(err){
+      console.error(err);
+      alert("Export failed — try again.");
+    } finally {
+      watermarkEl.style.display = originalWatermarkDisplay;
+      editorEl.style.display = originalDisplay;
+    }
+  });
+
+  // randomizer - smart combos
+  function randomizeState(){
+    const sampleTexts = [
+      "it’s giving main character energy 💅",
+      "mood: soft chaos 🌸",
+      "sorry i’m late — drama happened",
+      "vibe: immaculate & slightly iconic",
+      "don’t test me, i’m still golden",
+      "break rules, keep receipts ✨",
+      "i glow different, sit back",
+      "not for sale, for feels only"
+    ];
+    const fonts = ["Poppins","Playfair Display","Montserrat","Courier New","Inter"];
+    const colors = ["#ffe6f0","#e6f0ff","#eafaf1","#fff7e6","#ffecec","#e6eef8","#ffffff","#f6e9ff"];
+    const bgs = ["linear-gradient(90deg,#fff3f8,#ffe6f0)","linear-gradient(90deg,#e6f0ff,#eff6ff)","linear-gradient(90deg,#e9f9f0,#eafaf1)","#0b0b0b","linear-gradient(90deg,#fffaf0,#fff3e0)"];
+
+    state.text = sampleTexts[Math.floor(Math.random()*sampleTexts.length)];
+    state.font = fonts[Math.floor(Math.random()*fonts.length)];
+    state.color = colors[Math.floor(Math.random()*colors.length)];
+    state.bg = bgs[Math.floor(Math.random()*bgs.length)];
+    state.size = 44 + Math.floor(Math.random()*48);
+    state.glow = Math.random() > 0.6;
+    state.outline = Math.random() > 0.7;
+    state.shadow = Math.random() > 0.6;
+  }
+
+  // keyboard shortcuts (optional)
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'r' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); randomizeState(); applyStateToUI(); renderCanvas(); saveState(); }
+    if(e.key === 'z' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); doUndo(); }
+    if(e.key === 'y' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); doRedo(); }
+  });
+
+  // small helpers + initial boot
+  function init(){
+    // default state apply
+    loadState();
+    updateExportsUI();
+
+    // if first time show the editor automatically
+    if(!localStorage.getItem('fluxo_seen_intro')){
+      localStorage.setItem('fluxo_seen_intro','1');
+      bratEditor.style.display = 'block';
+    }
+
+    // apply default state if not set
+    if(!state.text) state.text = "it’s giving main character vibes 💅";
+    applyStateToUI();
+    renderCanvas();
+  }
+  init();
+
+  // apply immediate render on UI interactions (safeguarded)
+  ['input','change'].forEach(evt=>{
+    [bratText, bratFont, bratSize, bratAlign].forEach(el=>{
+      el.addEventListener(evt, ()=> { state.text = bratText.value; state.font = bratFont.value; state.size = Number(bratSize.value); state.align = bratAlign.value; renderCanvas(); saveState(); });
+    });
+  });
+
+  // connect undo/redo push for initial state
+  window.addEventListener('load', ()=> pushUndo());
+
+  // small UI helpers: click swatches
+  document.getElementById('bratColors').querySelectorAll('.swatch').forEach(s=>{
+    s.addEventListener('click', ()=> { pushUndo(); state.color = s.dataset.color; applyStateToUI(); renderCanvas(); saveState(); });
+  });
+  document.getElementById('bratBGs').querySelectorAll('.swatch').forEach(s=>{
+    s.addEventListener('click', ()=> { pushUndo(); state.bg = s.dataset.bg; applyStateToUI(); renderCanvas(); saveState(); });
+  });
+
+  // allow direct text input Enter => render
+  bratText.addEventListener('keypress', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); pushUndo(); state.text = bratText.value; renderCanvas(); saveState(); } });
+
+  // small help & goto-studio interactions (for UX)
+  document.getElementById('goto-studio').addEventListener('click', ()=> { window.scrollTo({top: document.querySelector('.main').offsetTop, behavior:'smooth'}); if(bratEditor.style.display==='none') bratOpening.click(); });
+  document.getElementById('helpBtn').addEventListener('click', ()=> alert('Fluxo — Brat Lab: Type a line, choose fonts, pick background and effects. Free: 2 exports/day. Pro unlock with password gives unlimited exports and pro options.'));
+
+  // exportQuality guard: if user selects >2 and not pro, prompt
+  exportQuality.addEventListener('change', ()=> {
+    const val = Number(exportQuality.value);
+    if(val>2 && !state.pro){
+      alert('High quality exports require Pro. For free users 2× will be used.');
+      exportQuality.value = 2;
+    }
+  });
+
+  // show current exports left
+  updateExportsUI();
+
+  // save before unload
+  window.addEventListener('beforeunload', ()=> saveState());
+  </script>
+</body>
+</html>
