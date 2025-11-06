@@ -42,8 +42,8 @@
 
     /* Brat preview */
     .preview-wrap { margin-bottom:12px; display:flex; justify-content:center; }
-    .preview-card { width:100%; max-width:760px; height:380px; border-radius:18px; background:linear-gradient(180deg,#ffdfe9,#fff0f5); display:flex; align-items:center; justify-content:center; padding[...]
-    .preview-inner { width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; box-sizing:border-box; word-break:break-word; line-height:0.95;[...]
+    .preview-card { width:100%; max-width:760px; height:380px; border-radius:18px; background:linear-gradient(180deg,#ffdfe9,#fff0f5); display:flex; align-items:center; justify-content:center; padding:12px; position:relative; }
+    .preview-inner { width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; box-sizing:border-box; word-break:break-word; line-height:0.95; }
     .preview-text { display:block; width:100%; color:var(--text-dark); font-weight:800; letter-spacing: -0.02em; }
 
     /* Watermark small bottom */
@@ -53,12 +53,12 @@
     .controls { display:flex; flex-direction:column; gap:12px; }
     .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .label { font-size:13px; color:#374151; margin-bottom:6px; font-weight:600; }
-    input[type="text"], textarea, select { width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(15,23,42,0.06); background:#fff; font-size:15px; color:var(--text-dark); outline:non[...]
+    input[type="text"], textarea, select { width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(15,23,42,0.06); background:#fff; font-size:15px; color:var(--text-dark); outline:none; }
     textarea { min-height:110px; resize:vertical }
     .small { padding:8px 10px; border-radius:10px; background:rgba(0,0,0,0.03); border:1px solid rgba(0,0,0,0.04); cursor:pointer; font-weight:600; }
 
     /* Buttons */
-    .btn { background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#041025; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700; box-shadow:0 10px 20px rg[...]
+    .btn { background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#041025; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700; box-shadow:0 10px 20px rgba(255,122,168,0.08); }
     .ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); padding:9px 12px; border-radius:12px; cursor:pointer }
     .generate { background:linear-gradient(90deg,#ff66b3,#ff3a82); color:white; padding:14px; border-radius:14px; border:none; font-weight:800; font-size:16px }
 
@@ -115,7 +115,7 @@
           <div class="preview-wrap">
             <div id="previewCard" class="preview-card" style="background:linear-gradient(180deg,#fff3f8,#ffe6f0);">
               <div id="previewInner" class="preview-inner">
-                <div id="previewText" class="preview-text" style="font-size:64px">it’s giving main character vibes 💅</div>
+                <div id="previewText" class="preview-text" style="font-size:50px">it’s giving main character vibes 💅</div>
               </div>
               <div id="watermark" class="watermark">Fluxo ✦ Abhiii</div>
             </div>
@@ -123,7 +123,6 @@
 
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
             <div class="meta">Exports today: <span id="exportCount">0</span>/2</div>
-            <!-- Removed public password display to avoid exposing secret in page -->
             <div class="muted" style="margin-left:auto">Pro: <strong>Locked</strong></div>
           </div>
         </div>
@@ -191,7 +190,6 @@
                 <div class="swatch" data-bg="linear-gradient(180deg,#e6f7ed,#dff7ee)" style="background:linear-gradient(90deg,#e6f7ed,#dff7ee)"></div>
                 <div class="swatch" data-bg="linear-gradient(180deg,#fef3f3,#fff0f5)" style="background:linear-gradient(90deg,#fef3f3,#fff0f5)"></div>
 
-                <!-- Added extra swatches: dark green, bright pink, teal, lavender, deep purple, coral -->
                 <div class="swatch" data-bg="#064e3b" style="background:linear-gradient(90deg,#064e3b,#0b6a4a)"></div>
                 <div class="swatch" data-bg="#ff007f" style="background:linear-gradient(90deg,#ff007f,#ff66a3)"></div>
                 <div class="swatch" data-bg="linear-gradient(180deg,#06b6d4,#67e8f9)" style="background:linear-gradient(90deg,#06b6d4,#67e8f9)"></div>
@@ -209,7 +207,7 @@
             <div>
               <div class="label">Font Size (px)</div>
               <input id="fontSize" type="range" min="18" max="50" value="50" />
-              <div class="meta">Current: <span id="fontSizeVal">64</span>px</div>
+              <div class="meta">Current: <span id="fontSizeVal">50</span>px</div>
             </div>
 
             <div>
@@ -359,10 +357,10 @@
     if(caseToggle.dataset.state === 'upper') text = text.toUpperCase();
     previewText.textContent = text;
 
-    // font CSS: we saved value "weight size family"
-    const fontVal = fontSelect.value.split(' ');
-    previewText.style.fontWeight = fontVal[0] || '700';
-    previewText.style.fontSize = (fontSize.value || 64) + 'px';
+    // font CSS: use fontSize control (max enforced by input)
+    previewText.style.fontWeight = (fontSelect.value.split(' ')[0]) || '700';
+    // fallback to 50px if fontSize not set
+    previewText.style.fontSize = (fontSize.value || 50) + 'px';
     previewText.style.fontFamily = fontSelect.value.split(' ').slice(2).join(' ') || 'Inter';
 
     previewText.style.color = textColor.value;
@@ -454,7 +452,7 @@
     outlineSelect.value = "none";
     glowToggle.checked = false;
     shadowToggle.checked = false;
-    fontSize.value = 64;
+    fontSize.value = 50;
     radius.value = 18;
     previewInner.style.justifyContent = 'center';
     previewText.style.padding = '12px';
@@ -606,7 +604,7 @@
   });
 
   // Reset all local storage button (for dev) — hidden in UI but accessible by console:
-  window.__fluxo_reset = function(){ localStorage.removeItem(EXPORT_KEY_COUNT); localStorage.removeItem(EXPORT_KEY_DATE); localStorage.removeItem(PRO_KEY); alert('Fluxo local storage reset.'); locatio[...]
+  window.__fluxo_reset = function(){ localStorage.removeItem(EXPORT_KEY_COUNT); localStorage.removeItem(EXPORT_KEY_DATE); localStorage.removeItem(PRO_KEY); alert('Fluxo local storage reset.'); location.reload(); };
 
 </script>
 
