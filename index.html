@@ -42,8 +42,8 @@
 
     /* Brat preview */
     .preview-wrap { margin-bottom:12px; display:flex; justify-content:center; }
-    .preview-card { width:100%; max-width:760px; height:380px; border-radius:18px; background:linear-gradient(180deg,#ffdfe9,#fff0f5); display:flex; align-items:center; justify-content:center; padding:12px; position:relative; }
-    .preview-inner { width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; box-sizing:border-box; word-break:break-word; line-height:0.95; }
+    .preview-card { width:100%; max-width:760px; height:380px; border-radius:18px; background:linear-gradient(180deg,#ffdfe9,#fff0f5); display:flex; align-items:center; justify-content:center; padding[...]
+    .preview-inner { width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:12px; box-sizing:border-box; word-break:break-word; line-height:0.95;[...]
     .preview-text { display:block; width:100%; color:var(--text-dark); font-weight:800; letter-spacing: -0.02em; }
 
     /* Watermark small bottom */
@@ -53,12 +53,12 @@
     .controls { display:flex; flex-direction:column; gap:12px; }
     .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .label { font-size:13px; color:#374151; margin-bottom:6px; font-weight:600; }
-    input[type="text"], textarea, select { width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(15,23,42,0.06); background:#fff; font-size:15px; color:var(--text-dark); outline:none; }
+    input[type="text"], textarea, select { width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(15,23,42,0.06); background:#fff; font-size:15px; color:var(--text-dark); outline:non[...]
     textarea { min-height:110px; resize:vertical }
     .small { padding:8px 10px; border-radius:10px; background:rgba(0,0,0,0.03); border:1px solid rgba(0,0,0,0.04); cursor:pointer; font-weight:600; }
 
     /* Buttons */
-    .btn { background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#041025; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700; box-shadow:0 10px 20px rgba(255,122,168,0.08); }
+    .btn { background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#041025; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700; box-shadow:0 10px 20px rg[...]
     .ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); padding:9px 12px; border-radius:12px; cursor:pointer }
     .generate { background:linear-gradient(90deg,#ff66b3,#ff3a82); color:white; padding:14px; border-radius:14px; border:none; font-weight:800; font-size:16px }
 
@@ -190,6 +190,14 @@
                 <div class="swatch" data-bg="linear-gradient(180deg,#fff7ed,#fff1d6)" style="background:linear-gradient(90deg,#fff7ed,#fff1d6)"></div>
                 <div class="swatch" data-bg="linear-gradient(180deg,#e6f7ed,#dff7ee)" style="background:linear-gradient(90deg,#e6f7ed,#dff7ee)"></div>
                 <div class="swatch" data-bg="linear-gradient(180deg,#fef3f3,#fff0f5)" style="background:linear-gradient(90deg,#fef3f3,#fff0f5)"></div>
+
+                <!-- Added extra swatches: dark green, bright pink, teal, lavender, deep purple, coral -->
+                <div class="swatch" data-bg="#064e3b" style="background:linear-gradient(90deg,#064e3b,#0b6a4a)"></div>
+                <div class="swatch" data-bg="#ff007f" style="background:linear-gradient(90deg,#ff007f,#ff66a3)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#06b6d4,#67e8f9)" style="background:linear-gradient(90deg,#06b6d4,#67e8f9)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#e9d5ff,#f3e8ff)" style="background:linear-gradient(90deg,#e9d5ff,#f3e8ff)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#5b21b6,#7c3aed)" style="background:linear-gradient(90deg,#5b21b6,#7c3aed)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#ff7a59,#ffb198)" style="background:linear-gradient(90deg,#ff7a59,#ffb198)"></div>
               </div>
             </div>
 
@@ -200,7 +208,7 @@
 
             <div>
               <div class="label">Font Size (px)</div>
-              <input id="fontSize" type="range" min="18" max="200" value="64" />
+              <input id="fontSize" type="range" min="18" max="50" value="50" />
               <div class="meta">Current: <span id="fontSizeVal">64</span>px</div>
             </div>
 
@@ -598,7 +606,7 @@
   });
 
   // Reset all local storage button (for dev) — hidden in UI but accessible by console:
-  window.__fluxo_reset = function(){ localStorage.removeItem(EXPORT_KEY_COUNT); localStorage.removeItem(EXPORT_KEY_DATE); localStorage.removeItem(PRO_KEY); alert('Fluxo local storage reset.'); location.reload(); };
+  window.__fluxo_reset = function(){ localStorage.removeItem(EXPORT_KEY_COUNT); localStorage.removeItem(EXPORT_KEY_DATE); localStorage.removeItem(PRO_KEY); alert('Fluxo local storage reset.'); locatio[...]
 
 </script>
 
