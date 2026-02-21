@@ -418,15 +418,40 @@
   });
 
   // custom background (pro-only)
-  customBg.addEventListener('change', ()=>{
-    const v = customBg.value.trim();
-    if(!v) return;
-    if(!isPro){
-      alert('Custom backgrounds are a Pro feature. Enter password to unlock Pro.');
-      return;
-    }
-    previewCard.style.background = v;
-  });
+  function applyCustomBackground(){
+  const v = customBg.value.trim();
+  if(!v) return;
+  if(!isPro){
+    alert('Custom backgrounds are a Pro feature. Enter password to unlock Pro.');
+    return;
+  }
+
+  // Validate by testing on a temp element
+  const testEl = document.createElement('div');
+  testEl.style.background = '';
+  testEl.style.background = v;
+
+  if(testEl.style.background === ''){
+    alert('Invalid color or gradient. Please enter a valid CSS background value.');
+    return;
+  }
+
+  previewCard.style.background = v;
+}
+
+// Apply when user presses Enter
+customBg.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    applyCustomBackground();
+    customBg.blur(); // close keyboard on mobile
+  }
+});
+
+// Apply when user leaves input
+customBg.addEventListener('blur', ()=>{
+  applyCustomBackground();
+});
 
   // align buttons
   document.getElementById('alignLeft').addEventListener('click', ()=> previewInner.style.justifyContent = 'flex-start');
