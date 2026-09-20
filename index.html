@@ -1,27 +1,657 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fluxo — Brat Creator Studio ✦ Abhiii</title>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=DM+Serif+Display&family=Inter:wght@300;400;600;700;800&family=IBM+Plex+Mono:wght@400;600&family=Montserrat:wght@400;700;900&family=Pacifico&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;600;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<style>
-:root{--bg:#f5f2f6;--panel:#fff;--ink:#18141e;--muted:#908a98;--line:#e8e3eb;--pink:#ff4098;--pink2:#ffb8da;--dark:#231d2b}*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1450px;margin:auto;padding:18px 24px 34px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.brand{font:700 30px 'Playfair Display',serif}.brand b{color:var(--pink)}.tag,.muted{font-size:12px;color:var(--muted)}.top-actions,.row{display:flex;gap:8px;align-items:center}.pill,.ghost,.primary,.tool,.chip{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;color:var(--ink);font-weight:700}.primary{background:linear-gradient(110deg,#ff328d,#ff75b6);border:0;color:#fff;box-shadow:0 8px 18px #ff40983d}.pill{background:#fff0a5;border:0;font-size:11px}.workspace{display:grid;grid-template-columns:270px minmax(440px,1fr) 300px;gap:15px;align-items:start}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 10px 26px #2b172f08}.panel h2{font-size:15px;margin:0 0 14px}.panel h3{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:18px 0 9px}.field{margin-bottom:13px}.label{font-size:11px;font-weight:800;color:#625b68;margin-bottom:6px;display:flex;justify-content:space-between}.label output{font-weight:400;color:var(--muted)}textarea,input[type=text],select{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#fcfbfd;outline:0;color:var(--ink)}textarea{min-height:96px;resize:vertical}input[type=range]{width:100%;accent-color:var(--pink)}input[type=color]{width:42px;height:38px;padding:3px;border:1px solid var(--line);border-radius:9px;background:#fff}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{font-size:10px;padding:7px 8px;background:#faf9fb}.chip.active,.tool.active{background:var(--dark);color:#fff;border-color:var(--dark)}.font-preview{padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.stage-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.stage-shell{display:flex;justify-content:center;align-items:center;padding:8px;min-height:560px;background:#eeeaf0;border-radius:14px}.stage{position:relative;width:min(100%,650px);aspect-ratio:1/1;overflow:hidden;background:linear-gradient(135deg,#fff3f8,#ffe0ee);border-radius:18px;box-shadow:0 12px 28px #261b2b22}.stage-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:var(--safe,44px);text-align:center}.stage-text{max-width:var(--width,90%);white-space:pre-wrap;overflow-wrap:anywhere;line-height:var(--line,1);letter-spacing:var(--spacing,0px);user-select:none;cursor:grab;transform:translate(var(--x,0px),var(--y,0px)) rotate(var(--rotate,0deg));transition:filter .15s}.stage-text.dragging{cursor:grabbing}.watermark{position:absolute;bottom:11px;right:14px;color:#1114;font-size:11px;pointer-events:none}.stage-footer{display:flex;justify-content:space-between;align-items:center;padding-top:11px}.toolbar{display:flex;gap:5px;flex-wrap:wrap}.tool{font-size:11px;padding:7px 9px}.position-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.position-grid button{height:29px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--muted)}.position-grid button.active{background:#ffe0ef;border-color:#ff8ac0;color:#a4195d}.swatches{display:flex;gap:6px;flex-wrap:wrap}.swatch{width:28px;height:28px;border:2px solid #0001;border-radius:8px;cursor:pointer}.divider{height:1px;background:var(--line);margin:16px 0}.template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.template{border:1px solid var(--line);border-radius:9px;padding:9px 7px;background:#fff;text-align:left;font-size:10px;font-weight:700}.template:hover{border-color:var(--pink)}.export{width:100%;margin-top:8px;padding:13px}.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:8px}.footer{text-align:center;color:var(--muted);font-size:11px;margin-top:20px}@media(max-width:1100px){.workspace{grid-template-columns:240px minmax(380px,1fr)}.right-panel{grid-column:1/-1}.right-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}}@media(max-width:760px){.app{padding:13px}.top{align-items:flex-start}.top-actions .ghost{display:none}.workspace{display:flex;flex-direction:column}.panel{width:100%}.stage-shell{min-height:0}.right-grid{display:block}}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fluxo — Brat Ultra Deluxe ✦ Abhiii</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Montserrat:wght@400;700;900&family=Playfair+Display:wght@400;700&family=Esteban&display=swap&family=Archivo+Black&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=DM+Serif+Display&family=Unbounded:wght@400;700&family=Pacifico&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#fff3f8;
+      --card:#fff;
+      --muted:#9aa8b8;
+      --accent:#ff7ab6;
+      --accent2:#ffb3d9;
+      --radius:18px;
+      --text-dark:#0b1020;
+      --line:rgba(17,24,39,0.06);
+      --rose:#fff1f7;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,-apple-system; -webkit-font-smoothing:antialiased; background:var(--bg); color:var(--text-dark)}
+    a{color:inherit}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+
+    .wrap { max-width:960px; margin:18px auto; padding:18px; }
+    header.top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    .brand { font-family:"Playfair Display", serif; font-size:28px; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; color:transparent; font-weight:700; }
+    .tag { color:var(--muted); font-size:13px; margin-top:4px; }
+
+    .main { display:grid; grid-template-columns: 1fr 360px; gap:20px; align-items:start; }
+    @media(max-width:980px){ .main{ grid-template-columns:1fr } }
+
+    .card { background:var(--card); border-radius:var(--radius); padding:16px; box-shadow: 0 10px 30px rgba(17,24,39,0.06); border:1px solid rgba(0,0,0,0.02); }
+    .lead { font-size:18px; color:#111827; font-weight:700; margin-bottom:6px; }
+    .sub { color:var(--muted); font-size:13px; margin-bottom:8px; }
+
+    .preview-wrap { margin-bottom:12px; display:flex; justify-content:center; }
+    .preview-card {
+      position:relative; width:100%; max-width:760px; height:380px; border-radius:18px;
+      background:linear-gradient(180deg,#ffdfe9,#fff0f5); display:flex; align-items:center; justify-content:center;
+      padding:18px; overflow:hidden; border:1px solid rgba(0,0,0,.04);
+      transition:all .18s ease;
+    }
+    .preview-inner {
+      width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center;
+      padding:16px; box-sizing:border-box; word-break:break-word; line-height:0.95;
+      position:relative; overflow:hidden; 
+      transform:translate(var(--x, 0px), var(--y, 0px));
+    }
+    .preview-text {
+      display:block; width:100%; max-width:var(--max-width, 90%); color:var(--text-dark); font-weight:800;
+      letter-spacing: -0.02em; transition:all .15s ease; user-select:none; cursor:grab; transform:rotate(var(--rotate, 0deg));
+    }
+    .preview-text.dragging{ cursor:grabbing; }
+    .watermark { position:absolute; bottom:10px; right:14px; font-size:12px; color:rgba(10,10,10,0.22); pointer-events:none; }
+
+    .controls { display:flex; flex-direction:column; gap:12px; }
+    .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .label { font-size:13px; color:#374151; margin-bottom:6px; font-weight:600; }
+    input[type="text"], textarea, select { width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#fff; font-size:15px; color:var(--text-dark); outline:none; }
+    textarea { min-height:110px; resize:vertical }
+    .small { padding:8px 10px; border-radius:10px; background:rgba(0,0,0,0.03); border:1px solid rgba(0,0,0,0.04); cursor:pointer; font-weight:600; }
+
+    .btn { background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#041025; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700; box-shadow:0 10px 20px rgba(255,122,182,0.18); }
+    .ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); padding:9px 12px; border-radius:12px; cursor:pointer }
+    .generate { background:linear-gradient(90deg,#ff66b3,#ff3a82); color:white; padding:14px; border-radius:14px; border:none; font-weight:800; font-size:16px }
+
+    .swatches { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .swatch { width:36px; height:36px; border-radius:10px; border:2px solid rgba(0,0,0,0.04); cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.04) }
+
+    .meta { font-size:13px; color:var(--muted) }
+    footer.sitefoot { text-align:center; margin-top:18px; color:var(--muted); font-size:13px; padding-bottom:36px; }
+    .muted { color:var(--muted); font-size:13px }
+    .align-buttons .small { min-width:60px; text-align:center } 
+    .toggle-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+
+    .pro-badge { background:linear-gradient(90deg,#ffd166,#ff7a00); padding:6px 10px; border-radius:999px; color:#041025; font-weight:700; font-size:12px }
+    .hide-for-export { transition:opacity .12s ease; }
+
+    .pos-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .pos-grid button { border:1px solid var(--line); background:#fff; border-radius:10px; padding:9px 6px; font-weight:700; color:#444; }
+    .pos-grid button.active { background:#ffe6f1; border-color:#ff9ac4; color:#9d1d5b; }
+
+    @media(max-width:720px){
+      .preview-card { height:340px; padding:18px }
+    }
+  </style>
 </head>
-<body><div class="app">
-<header class="top"><div><div class="brand">Fluxo <b>✦</b></div><div class="tag">DaVinci-inspired brat & meme creator studio — made for social media</div></div><div class="top-actions"><span id="proBadge" class="pill" hidden>ULTRA PRO</span><button id="unlockBtn" class="ghost">Unlock Pro</button></div></header>
-<main class="workspace">
-<aside class="panel"><h2>Text inspector</h2><div class="field"><div class="label">Text layer</div><textarea id="inputText">it’s giving main character vibes 💅</textarea></div><div class="field"><div class="label">Font family</div><select id="fontSelect"><option>Inter</option><option>Space Grotesk</option><option>Archivo Black</option><option>Bebas Neue</option><option>Montserrat</option><option>Unbounded</option><option>DM Serif Display</option><option>Playfair Display</option><option>Pacifico</option><option>IBM Plex Mono</option></select><div id="fontSample" class="font-preview">Fluxo — it’s giving</div></div><div class="field"><div class="label">Case</div><div class="chips"><button class="chip active" data-case="normal">Aa Normal</button><button class="chip" data-case="upper">AA Upper</button><button class="chip" data-case="lower">aa Lower</button></div></div><div class="two"><div class="field"><div class="label">Size <output id="fontSizeVal">58</output></div><input id="fontSize" type="range" min="14" max="150" value="58"></div><div class="field"><div class="label">Weight</div><select id="weight"><option value="400">Regular</option><option value="600">Semibold</option><option value="700" selected>Bold</option><option value="900">Black</option></select></div></div><div class="field"><div class="label">Color & effect</div><div class="row"><input id="textColor" type="color" value="#18141e"><select id="effect"><option value="none">Clean</option><option value="stroke">Outline</option><option value="shadow">Shadow</option><option value="neon">Neon</option></select></div></div><div class="field"><div class="label">Text alignment</div><div class="toolbar"><button class="tool active" data-align="center">Center</button><button class="tool" data-align="left">Left</button><button class="tool" data-align="right">Right</button></div></div></aside>
-<section class="panel"><div class="stage-head"><strong>Canvas / timeline</strong><span class="muted">Live preview · drag text to position</span></div><div class="stage-shell"><div id="stage" class="stage"><div id="stageInner" class="stage-inner"><div id="stageText" class="stage-text">it’s giving main character vibes 💅</div></div><div id="watermark" class="watermark">Fluxo ✦ Abhiii</div></div></div><div class="stage-footer"><span class="muted">Exports today: <b id="exportCount">0</b>/2</span><div class="toolbar"><button id="randomizeBtn" class="ghost">✦ Auto layout</button><button id="resetBtn" class="ghost">Reset</button></div></div></section>
-<aside class="panel right-panel"><div class="right-grid"><div><h2>Composition</h2><h3>Social format</h3><div class="template-grid"><button class="template" data-ratio="1/1">Post<br>1:1</button><button class="template" data-ratio="4/5">Portrait<br>4:5</button><button class="template" data-ratio="9/16">Story / Reel<br>9:16</button><button class="template" data-ratio="16/9">Video<br>16:9</button></div><h3>Position</h3><div class="position-grid"><button data-pos="top-left">↖</button><button data-pos="top">↑</button><button data-pos="top-right">↗</button><button data-pos="left">←</button><button data-pos="center" class="active">●</button><button data-pos="right">→</button><button data-pos="bottom-left">↙</button><button data-pos="bottom">↓</button><button data-pos="bottom-right">↘</button></div><div class="field" style="margin-top:13px"><div class="label">Safe space <output id="spaceVal">44</output>px</div><input id="space" type="range" min="0" max="180" value="44"></div><div class="field"><div class="label">Text width <output id="widthVal">90</output>%</div><input id="textWidth" type="range" min="20" max="100" value="90"></div><div class="two"><div class="field"><div class="label">Line height</div><input id="lineHeight" type="range" min="70" max="160" value="100"></div><div class="field"><div class="label">Letter spacing</div><input id="letterSpacing" type="range" min="-5" max="25" value="0"></div></div><div class="field"><div class="label">Rotation <output id="rotationVal">0</output>°</div><input id="rotation" type="range" min="-15" max="15" value="0"></div></div><div><h2>Look & export</h2><h3>Background</h3><div id="swatches" class="swatches"><span class="swatch" data-bg="linear-gradient(135deg,#fff3f8,#ffe0ee)" style="background:#ffe5f0"></span><span class="swatch" data-bg="#fff" style="background:#fff"></span><span class="swatch" data-bg="#111" style="background:#111"></span><span class="swatch" data-bg="linear-gradient(135deg,#d9f8ff,#a5e8f5)" style="background:#b7eff8"></span><span class="swatch" data-bg="linear-gradient(135deg,#eadcff,#a98cf4)" style="background:#b99cf7"></span><span class="swatch" data-bg="linear-gradient(135deg,#fff0c7,#ffb36b)" style="background:#ffc27c"></span><span class="swatch" data-bg="#064e3b" style="background:#064e3b"></span><span class="swatch" data-bg="#ff007f" style="background:#ff007f"></span></div><div class="field" style="margin-top:12px"><div class="label">Custom background</div><input id="customBg" type="text" placeholder="#fafafa or linear-gradient(...)" /></div><div class="field"><div class="label">Corner radius <output id="radiusVal">18</output>px</div><input id="radius" type="range" min="0" max="100" value="18"></div><div class="row"><button id="toggleWatermark" class="ghost">Watermark</button><button id="downloadJpg" class="ghost">JPG</button></div><button id="generateBtn" class="primary export">Generate & download PNG</button><div class="hint">Pick a social ratio, set a safe margin, choose a template, then drag the text on the canvas. PNG export includes only the artwork.</div></div></div></aside></main><div class="footer">© 2025 Fluxo — your brat-first meme production room ✦</div></div>
+<body>
+
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <div class="brand">Fluxo <span style="font-size:12px; font-weight:400; color:#9b6a7a; margin-left:8px">✦ make your edits flowww</span></div>
+        <div class="tag">crafted with 💖 by Abhiii — for the Meme Geeks</div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <div id="proBadge" style="display:none" class="pro-badge">Fluxo Ultra Pro</div>
+        <button id="unlockBtn" class="ghost">Unlock Pro</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section>
+        <div class="card">
+          <div class="lead">Brat Preview</div>
+          <div class="sub">Big bold brat text card — use Generate to capture a clean PNG. Free: 2/day. Pro: unlimited.</div>
+
+          <div class="preview-wrap">
+            <div id="previewCard" class="preview-card" style="background:linear-gradient(180deg,#fff3f8,#ffe6f0);">
+              <div id="previewInner" class="preview-inner">
+                <div id="previewText" class="preview-text" style="font-size:50px">it’s giving main character vibes 💅</div>
+              </div>
+              <div id="watermark" class="watermark">Fluxo ✦ Abhiii</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <div class="meta">Exports today: <span id="exportCount">0</span>/2</div>
+            <div class="muted" style="margin-left:auto">Pro: <strong>Locked</strong></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="lead">Brat Controls</div>
+
+          <div id="controlsArea" class="controls">
+            <div>
+              <div class="label">Your Text</div>
+              <textarea id="inputText" placeholder="Type your meme text here...">it’s giving main character vibes 💅</textarea>
+            </div>
+
+            <div>
+              <div class="label">Font</div>
+              <select id="fontSelect">
+                <option value="Inter">Inter (bold)</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Playfair Display">Playfair</option>
+                <option value="Archivo Black">Archivo Black</option>
+                <option value="Bebas Neue">Bebas Neue</option>
+                <option value="Space Grotesk">Space Grotesk</option>
+                <option value="DM Serif Display">DM Serif</option>
+                <option value="Unbounded">Unbounded</option>
+                <option value="Pacifico">Pacifico</option>
+                <option value="IBM Plex Mono">Mono (retro)</option>
+                <option value="Esteban">Esteban (Serif)</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="label">Text Color / Case</div>
+              <div class="row">
+                <input type="color" id="textColor" value="#0b1020" class="small" style="width:56px;height:40px;padding:6px;border-radius:10px"/>
+                <button id="caseToggle" class="small">UPPERCASE</button>
+                <div style="margin-left:auto" class="muted">Outline / Glow / Shadow</div>
+              </div>
+            </div>
+
+            <div class="row" style="align-items:center">
+              <div>
+                <div class="label">Outline (Stroke)</div>
+                <select id="outlineSelect" class="small">
+                  <option value="none">No Outline</option>
+                  <option value="thin">Thin</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="label">Glow</div>
+                <label class="small"><input type="checkbox" id="glowToggle" /> Enable</label>
+              </div>
+
+              <div>
+                <div class="label">Drop Shadow</div>
+                <label class="small"><input type="checkbox" id="shadowToggle" /> Enable</label>
+              </div>
+            </div>
+
+            <div>
+              <div class="label">Background Swatches</div>
+              <div class="swatches" id="bgSwatches">
+                <div class="swatch" data-bg="linear-gradient(180deg,#fff3f8,#ffe6f0)" style="background:linear-gradient(90deg,#fff3f8,#ffe6f0)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#f0f9ff,#e6f7ff)" style="background:linear-gradient(90deg,#e6f7ff,#f0f9ff)"></div>
+                <div class="swatch" data-bg="#ffffff" style="background:#ffffff"></div>
+                <div class="swatch" data-bg="#000000" style="background:#000000"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#fff7ed,#fff1d6)" style="background:linear-gradient(90deg,#fff7ed,#fff1d6)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#e6f7ed,#dff7ee)" style="background:linear-gradient(90deg,#e6f7ed,#dff7ee)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#fef3f3,#fff0f5)" style="background:linear-gradient(90deg,#fef3f3,#fff0f5)"></div>
+                <div class="swatch" data-bg="#064e3b" style="background:linear-gradient(90deg,#064e3b,#0b6a4a)"></div>
+                <div class="swatch" data-bg="#ff007f" style="background:linear-gradient(90deg,#ff007f,#ff66a3)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#06b6d4,#67e8f9)" style="background:linear-gradient(90deg,#06b6d4,#67e8f9)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#e9d5ff,#f3e8ff)" style="background:linear-gradient(90deg,#e9d5ff,#f3e8ff)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#5b21b6,#7c3aed)" style="background:linear-gradient(90deg,#5b21b6,#7c3aed)"></div>
+                <div class="swatch" data-bg="linear-gradient(180deg,#ff7a59,#ffb198)" style="background:linear-gradient(90deg,#ff7a59,#ffb198)"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="label">Custom Background (pro)</div>
+              <input type="text" id="customBg" placeholder="e.g. linear-gradient(90deg,#abc,#def) or #fafafa" />
+            </div>
+
+            <div>
+              <div class="label">Font Size (px)</div>
+              <input id="fontSize" type="range" min="18" max="72" value="50" />
+              <div class="meta">Current: <span id="fontSizeVal">50</span>px</div>
+            </div>
+
+            <div>
+              <div class="label">Border Radius</div>
+              <input id="radius" type="range" min="0" max="80" value="18" />
+              <div class="meta">Current: <span id="radiusVal">18</span>px</div>
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center">
+              <button id="randomizeBtn" class="ghost">Randomize Placement</button>
+              <button id="generateBtn" class="generate" style="margin-left:auto">Generate (PNG)</button>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+              <div class="muted">Pro features include gradient text, better spacing, extra fonts, and unlimited downloads</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">Fluxo Lab</div>
+              <div class="muted">Brat text generator — clean, fast PNG export</div>
+            </div>
+            <div class="muted">v3.6</div>
+          </div>
+
+          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)"/>
+
+          <div>
+            <div class="label">Options</div>
+            <div class="row align-buttons">
+              <button id="alignLeft" class="small">Left</button>
+              <button id="alignCenter" class="small">Center</button>
+              <button id="alignRight" class="small">Right</button>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <div class="label">Text Position</div>
+            <div class="pos-grid">
+              <button data-pos="top-left">↖</button>
+              <button data-pos="top">↑</button>
+              <button data-pos="top-right">↗</button>
+              <button data-pos="left">←</button>
+              <button data-pos="center" class="active">●</button>
+              <button data-pos="right">→</button>
+              <button data-pos="bottom-left">↙</button>
+              <button data-pos="bottom">↓</button>
+              <button data-pos="bottom-right">↘</button>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <div class="label">Export / Pro</div>
+            <div style="display:flex;gap:8px">
+              <button id="downloadBtn" class="btn">Download Now</button>
+              <button id="resetBtn" class="ghost">Reset</button>
+            </div>
+            <div class="muted" style="margin-top:8px">Note: Generate hides UI and produces a clean image; Download triggers the same behavior.</div>
+          </div>
+
+          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)"/>
+
+          <div>
+            <div class="label">Pro / Unlock</div>
+            <div style="display:flex;gap:8px">
+              <button id="askPassword" class="small">Enter Password</button>
+              <button id="toggleWatermark" class="small">Toggle Watermark</button>
+            </div>
+            <div class="muted" style="margin-top:8px">Daily exports stored locally. Clearing storage resets counts.</div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="sitefoot">© 2025 Crafted with 💖 by Abhiii for the Meme Geeks</footer>
+  </div>
+
 <script>
-const $=id=>document.getElementById(id),stage=$('stage'),inner=$('stageInner'),text=$('stageText');let mode='normal',watermark=true,isPro=localStorage.getItem('fluxo_pro_unlocked')==='1';const dateKey='fluxo_exports_date',countKey='fluxo_exports_count';
-function count(){let d=new Date().toISOString().slice(0,10);if(localStorage.getItem(dateKey)!==d){localStorage.setItem(dateKey,d);localStorage.setItem(countKey,'0')}$('exportCount').textContent=localStorage.getItem(countKey)||'0'}count();if(isPro){$('proBadge').hidden=false;$('unlockBtn').hidden=true}
-function apply(){let v=$('inputText').value||'Type something beautiful';if(mode==='upper')v=v.toUpperCase();if(mode==='lower')v=v.toLowerCase();text.textContent=v;text.style.fontFamily=`'${$('fontSelect').value}',sans-serif`;text.style.fontSize=$('fontSize').value+'px';text.style.fontWeight=$('weight').value;text.style.color=$('textColor').value;text.style.lineHeight=$('lineHeight').value/100;text.style.letterSpacing=$('letterSpacing').value+'px';text.style.textAlign=text.dataset.align||'center';text.style.transform=`translate(var(--x,0px),var(--y,0px)) rotate(${$('rotation').value}deg)`;$('fontSample').style.fontFamily=`'${$('fontSelect').value}',sans-serif`;$('fontSample').textContent=$('fontSelect').value+' — Fluxo';$('fontSizeVal').textContent=$('fontSize').value;$('spaceVal').textContent=$('space').value;$('widthVal').textContent=$('textWidth').value;$('rotationVal').textContent=$('rotation').value;stage.style.setProperty('--safe',$('space').value+'px');stage.style.setProperty('--width',$('textWidth').value+'%');stage.style.setProperty('--line',$('lineHeight').value/100);stage.style.setProperty('--spacing',$('letterSpacing').value+'px');stage.style.borderRadius=$('radius').value+'px';let e=$('effect').value;text.style.webkitTextStroke=e==='stroke'?'2px currentColor':'0 transparent';text.style.textShadow=e==='shadow'?'0 10px 24px #0005':e==='neon'?'0 0 8px currentColor,0 0 25px #ff4098':'none'}
-['inputText','fontSelect','weight','textColor','effect','fontSize','space','textWidth','lineHeight','letterSpacing','rotation','radius'].forEach(id=>$(id).addEventListener('input',apply));document.querySelectorAll('[data-case]').forEach(b=>b.onclick=()=>{mode=b.dataset.case;document.querySelectorAll('[data-case]').forEach(x=>x.classList.remove('active'));b.classList.add('active');apply()});document.querySelectorAll('[data-align]').forEach(b=>b.onclick=()=>{text.dataset.align=b.dataset.align;document.querySelectorAll('[data-align]').forEach(x=>x.classList.remove('active'));b.classList.add('active');apply()});
-const pos={"top-left":'flex-start flex-start',top:'flex-start center','top-right':'flex-start flex-end',left:'center flex-start',center:'center center',right:'center flex-end','bottom-left':'flex-end flex-start',bottom:'flex-end center','bottom-right':'flex-end flex-end'};document.querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>{inner.style.alignItems=pos[b.dataset.pos].split(' ')[0];inner.style.justifyContent=pos[b.dataset.pos].split(' ')[1];document.querySelectorAll('[data-pos]').forEach(x=>x.classList.remove('active'));b.classList.add('active')});document.querySelectorAll('[data-ratio]').forEach(b=>b.onclick=()=>stage.style.aspectRatio=b.dataset.ratio);$('swatches').querySelectorAll('.swatch').forEach(s=>s.onclick=()=>stage.style.background=s.dataset.bg);$('customBg').onchange=()=>{let t=document.createElement('div');t.style.background=$('customBg').value;if(t.style.background)stage.style.background=$('customBg').value};$('toggleWatermark').onclick=()=>{$('watermark').style.display=(watermark=!watermark)?'block':'none'};
-$('randomizeBtn').onclick=()=>{document.querySelectorAll('[data-pos]')[Math.floor(Math.random()*9)].click();$('space').value=25+Math.floor(Math.random()*100);$('rotation').value=Math.floor(Math.random()*11)-5;apply()};$('resetBtn').onclick=()=>location.reload();$('unlockBtn').onclick=()=>{let p=prompt('Enter Pro password:');if(p==='ABHIJEET0123'){isPro=true;localStorage.setItem('fluxo_pro_unlocked','1');$('proBadge').hidden=false;$('unlockBtn').hidden=true}else if(p)alert('Wrong password.')};
-let drag=false,startX=0,startY=0,x=0,y=0;text.onpointerdown=e=>{drag=true;startX=e.clientX;startY=e.clientY;text.classList.add('dragging');text.setPointerCapture(e.pointerId)};text.onpointermove=e=>{if(!drag)return;x+=e.clientX-startX;y+=e.clientY-startY;startX=e.clientX;startY=e.clientY;text.style.setProperty('--x',x+'px');text.style.setProperty('--y',y+'px')};text.onpointerup=()=>{drag=false;text.classList.remove('dragging')};
-async function exportFile(type){count();let n=Number(localStorage.getItem(countKey)||0);if(!isPro&&n>=2){alert('You have used 2 free exports today. Unlock Pro for unlimited downloads.');return}let c=await html2canvas(stage,{backgroundColor:null,scale:isPro?2.4:2});c.toBlob(blob=>{let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fluxo-brat-'+Date.now()+'.'+type;a.click();URL.revokeObjectURL(a.href)},type==='jpg'?'image/jpeg':'image/png');if(!isPro){localStorage.setItem(countKey,++n);count()}}$('generateBtn').onclick=()=>exportFile('png');$('downloadJpg').onclick=()=>exportFile('jpg');apply();
-</script></body></html>
+  const EXPORT_KEY_DATE = 'fluxo_exports_date';
+  const EXPORT_KEY_COUNT = 'fluxo_exports_count';
+  const PRO_KEY = 'fluxo_pro_unlocked';
+  const PRO_PASSWORD = atob('QUJISUpFRVQwMTIz'); // ABHIJEET0123
+
+  const inputText = document.getElementById('inputText');
+  const previewText = document.getElementById('previewText');
+  const previewCard = document.getElementById('previewCard');
+  const previewInner = document.getElementById('previewInner');
+  const fontSelect = document.getElementById('fontSelect');
+  const textColor = document.getElementById('textColor');
+  const caseToggle = document.getElementById('caseToggle');
+  const outlineSelect = document.getElementById('outlineSelect');
+  const glowToggle = document.getElementById('glowToggle');
+  const shadowToggle = document.getElementById('shadowToggle');
+  const bgSwatches = document.getElementById('bgSwatches');
+  const customBg = document.getElementById('customBg');
+  const fontSize = document.getElementById('fontSize');
+  const fontSizeVal = document.getElementById('fontSizeVal');
+  const radius = document.getElementById('radius');
+  const radiusVal = document.getElementById('radiusVal');
+  const randomizeBtn = document.getElementById('randomizeBtn');
+  const generateBtn = document.getElementById('generateBtn');
+  const exportCountEl = document.getElementById('exportCount');
+  const unlockBtn = document.getElementById('unlockBtn');
+  const proBadge = document.getElementById('proBadge');
+  const askPassword = document.getElementById('askPassword');
+  const watermarkEl = document.getElementById('watermark');
+  const toggleWatermark = document.getElementById('toggleWatermark');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let isPro = localStorage.getItem(PRO_KEY) === '1';
+  let watermarkVisible = true;
+  let exportToday = 0;
+
+  function loadExportCount() {
+    const savedDate = localStorage.getItem(EXPORT_KEY_DATE) || '';
+    const today = new Date().toISOString().slice(0,10);
+    if(savedDate !== today) {
+      localStorage.setItem(EXPORT_KEY_DATE, today);
+      localStorage.setItem(EXPORT_KEY_COUNT, '0');
+      exportToday = 0;
+    } else {
+      exportToday = Number(localStorage.getItem(EXPORT_KEY_COUNT) || '0');
+    }
+    exportCountEl.textContent = exportToday;
+  }
+
+  function updateProUI(){
+    if(isPro){
+      proBadge.style.display='inline-block';
+      unlockBtn.style.display='none';
+    } else {
+      proBadge.style.display='none';
+      unlockBtn.style.display='inline-block';
+    }
+  }
+
+  function setPreviewFromInputs(){
+    let text = inputText.value || '';
+    if(caseToggle.dataset.state === 'upper') text = text.toUpperCase();
+    if(caseToggle.dataset.state === 'lower') text = text.toLowerCase();
+    previewText.textContent = text;
+
+    const family = fontSelect.value || 'Inter';
+    previewText.style.fontFamily = family;
+    previewText.style.fontWeight = '700';
+    previewText.style.fontSize = (fontSize.value || 50) + 'px';
+    previewText.style.color = textColor.value;
+
+    if(outlineSelect.value === 'none'){
+      previewText.style.webkitTextStroke = '0px transparent';
+    } else if(outlineSelect.value === 'thin'){
+      previewText.style.webkitTextStroke = '2px rgba(0,0,0,0.22)';
+    } else {
+      previewText.style.webkitTextStroke = '4px rgba(0,0,0,0.23)';
+    }
+
+    if(glowToggle.checked){
+      previewText.style.textShadow = '0 8px 28px rgba(255,82,120,0.14), 0 2px 6px rgba(0,0,0,0.06)';
+    } else {
+      previewText.style.textShadow = 'none';
+    }
+
+    if(shadowToggle.checked){
+      previewText.style.filter = 'drop-shadow(0 12px 18px rgba(10,10,10,0.08))';
+    } else {
+      previewText.style.filter = 'none';
+    }
+
+    previewCard.style.borderRadius = radius.value + 'px';
+    radiusVal.textContent = radius.value;
+    fontSizeVal.textContent = fontSize.value;
+  }
+
+  inputText.addEventListener('input', setPreviewFromInputs);
+  fontSelect.addEventListener('change', setPreviewFromInputs);
+  textColor.addEventListener('input', setPreviewFromInputs);
+  fontSize.addEventListener('input', setPreviewFromInputs);
+  radius.addEventListener('input', setPreviewFromInputs);
+  outlineSelect.addEventListener('change', setPreviewFromInputs);
+  glowToggle.addEventListener('change', setPreviewFromInputs);
+  shadowToggle.addEventListener('change', setPreviewFromInputs);
+
+  caseToggle.dataset.state = 'upper';
+  caseToggle.addEventListener('click', ()=>{
+    if(caseToggle.dataset.state === 'upper'){
+      caseToggle.dataset.state = 'lower';
+      caseToggle.textContent = 'lowercase';
+    } else if(caseToggle.dataset.state === 'lower'){
+      caseToggle.dataset.state = 'normal';
+      caseToggle.textContent = 'Normal';
+    } else {
+      caseToggle.dataset.state = 'upper';
+      caseToggle.textContent = 'UPPERCASE';
+    }
+    setPreviewFromInputs();
+  });
+
+  bgSwatches.querySelectorAll('.swatch').forEach(s=>{
+    s.addEventListener('click', ()=>{
+      const bg = s.dataset.bg;
+      previewCard.style.background = bg;
+    });
+  });
+
+  function applyCustomBackground(){
+    const v = customBg.value.trim();
+    if(!v) return;
+    if(!isPro){
+      alert('Custom backgrounds are a Pro feature. Enter password to unlock Pro.');
+      return;
+    }
+
+    const testEl = document.createElement('div');
+    testEl.style.background = v;
+    if(testEl.style.background === ''){
+      alert('Invalid CSS background value. Try a color or gradient like #fafafa or linear-gradient(90deg,#abc,#def).');
+      return;
+    }
+    previewCard.style.background = v;
+  }
+
+  customBg.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){ e.preventDefault(); applyCustomBackground(); customBg.blur(); }
+  });
+  customBg.addEventListener('blur', applyCustomBackground);
+
+  document.getElementById('alignLeft').addEventListener('click', ()=> previewInner.style.justifyContent = 'flex-start');
+  document.getElementById('alignCenter').addEventListener('click', ()=> previewInner.style.justifyContent = 'center');
+  document.getElementById('alignRight').addEventListener('click', ()=> previewInner.style.justifyContent = 'flex-end');
+
+  document.querySelectorAll('[data-pos]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-pos]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const pos = btn.dataset.pos;
+      const map = {
+        'top-left': ['flex-start','flex-start'],
+        'top': ['flex-start','center'],
+        'top-right': ['flex-start','flex-end'],
+        'left': ['center','flex-start'],
+        'center': ['center','center'],
+        'right': ['center','flex-end'],
+        'bottom-left': ['flex-end','flex-start'],
+        'bottom': ['flex-end','center'],
+        'bottom-right': ['flex-end','flex-end']
+      };
+      const [a, b] = map[pos];
+      previewInner.style.alignItems = a;
+      previewInner.style.justifyContent = b;
+    });
+  });
+
+  randomizeBtn.addEventListener('click', ()=>{
+    const alignMap = ['flex-start','center','flex-end'];
+    previewInner.style.justifyContent = alignMap[Math.floor(Math.random()*alignMap.length)];
+    const pad = 12 + Math.floor(Math.random()*60);
+    previewText.style.padding = pad + 'px';
+    const r = (Math.random()-0.5) * 8;
+    previewText.style.setProperty('--rotate', r + 'deg');
+    setTimeout(()=> previewText.style.setProperty('--rotate', '0deg'), 600);
+  });
+
+  function resetAll(){
+    inputText.value = "it’s giving main character vibes 💅";
+    previewCard.style.background = 'linear-gradient(180deg,#fff3f8,#ffe6f0)';
+    fontSelect.value = 'Inter';
+    textColor.value = '#0b1020';
+    outlineSelect.value = 'none';
+    glowToggle.checked = false;
+    shadowToggle.checked = false;
+    fontSize.value = 50;
+    radius.value = 18;
+    previewInner.style.justifyContent = 'center';
+    previewInner.style.alignItems = 'center';
+    previewText.style.padding = '12px';
+    previewText.style.setProperty('--rotate', '0deg');
+    previewText.style.setProperty('--x', '0px');
+    previewText.style.setProperty('--y', '0px');
+    previewText.style.width = '100%';
+    watermarkEl.style.display = watermarkVisible ? 'block' : 'none';
+    setPreviewFromInputs();
+  }
+  resetBtn.addEventListener('click', resetAll);
+
+  toggleWatermark.addEventListener('click', ()=>{
+    watermarkVisible = !watermarkVisible;
+    watermarkEl.style.display = watermarkVisible ? 'block' : 'none';
+  });
+
+  askPassword.addEventListener('click', ()=> {
+    const raw = prompt('Enter Pro password:');
+    if(!raw) { alert('Password entry cancelled.'); return; }
+    const pwd = raw.trim();
+    if(pwd === PRO_PASSWORD){
+      isPro = true; localStorage.setItem(PRO_KEY,'1');
+      alert('Pro unlocked — enjoy unlimited exports and Pro features!');
+      updateProUI();
+    } else {
+      alert('Wrong password.');
+    }
+  });
+
+  unlockBtn.addEventListener('click', ()=> askPassword.click());
+
+  downloadBtn.addEventListener('click', ()=> generateAndDownload());
+
+  async function canExportNow(){
+    loadExportCount();
+    if(isPro) return true;
+    if(exportToday >= 2){
+      const tryPwd = confirm('You have used 2 free exports today. Enter Pro password to unlock unlimited exports.');
+      if(tryPwd){
+        const raw = prompt('Enter password:');
+        if(!raw) { alert('Password entry cancelled. Export canceled.'); return false; }
+        const pwd = raw.trim();
+        if(pwd === PRO_PASSWORD){ isPro = true; localStorage.setItem(PRO_KEY,'1'); updateProUI(); return true; }
+        alert('Wrong password. Export canceled.'); return false;
+      }
+      return false;
+    }
+    return true;
+  }
+
+  async function generateAndDownload(){
+    if(!await canExportNow()) return;
+
+    document.getElementById('controlsArea').style.visibility = 'hidden';
+    document.querySelectorAll('.ghost, .btn, .generate, .small').forEach(x=> x.style.visibility = 'hidden');
+    document.querySelector('header.top').style.visibility = 'hidden';
+    document.querySelector('footer.sitefoot').style.visibility = 'hidden';
+
+    const scale = isPro ? 2.4 : 1.4;
+
+    try {
+      const canvas = await html2canvas(previewCard, { backgroundColor: null, scale });
+      canvas.toBlob((blob)=>{
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const name = `fluxo-brat-${Date.now()}.png`;
+        a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+
+      if(!isPro){
+        exportToday = Number(localStorage.getItem(EXPORT_KEY_COUNT) || '0') + 1;
+        localStorage.setItem(EXPORT_KEY_COUNT, String(exportToday));
+        localStorage.setItem(EXPORT_KEY_DATE, new Date().toISOString().slice(0,10));
+        exportCountEl.textContent = exportToday;
+      }
+    } catch(e){
+      console.error(e);
+      alert('Export failed — try again.');
+    } finally {
+      document.getElementById('controlsArea').style.visibility = 'visible';
+      document.querySelectorAll('.ghost, .btn, .generate, .small').forEach(x=> x.style.visibility = 'visible');
+      document.querySelector('header.top').style.visibility = 'visible';
+      document.querySelector('footer.sitefoot').style.visibility = 'visible';
+    }
+  }
+
+  generateBtn.addEventListener('click', generateAndDownload);
+
+  function autoFitText(){
+    const maxAttempts = 8; let attempts = 0;
+    function fit(){
+      attempts++;
+      const inner = previewInner.getBoundingClientRect();
+      const txt = previewText.getBoundingClientRect();
+      if((txt.height > inner.height - 20 || txt.width > inner.width - 20) && attempts < maxAttempts){
+        const current = Number(fontSize.value);
+        if(current > 20){
+          fontSize.value = Math.max(20, current - 6);
+          setPreviewFromInputs();
+          requestAnimationFrame(fit);
+        }
+      }
+    }
+    setTimeout(fit,120);
+  }
+
+  inputText.addEventListener('input', ()=>{ setPreviewFromInputs(); autoFitText(); });
+
+  (function dailyResetCheck(){
+    loadExportCount();
+    setInterval(loadExportCount, 60*1000);
+  })();
+
+  (function init(){
+    watermarkEl.style.display = watermarkVisible ? 'block' : 'none';
+    if(isPro) updateProUI();
+    setPreviewFromInputs();
+  })();
+
+  window.addEventListener('keydown',(e)=>{
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'g'){
+      e.preventDefault();
+      generateAndDownload();
+    }
+  });
+
+  let drag = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let deltaX = 0;
+  let deltaY = 0;
+
+  previewText.addEventListener('pointerdown', (e) => {
+    drag = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    previewText.classList.add('dragging');
+    previewText.setPointerCapture(e.pointerId);
+  });
+
+  previewText.addEventListener('pointermove', (e) => {
+    if(!drag) return;
+    deltaX += e.clientX - dragStartX;
+    deltaY += e.clientY - dragStartY;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    previewText.style.setProperty('--x', deltaX + 'px');
+    previewText.style.setProperty('--y', deltaY + 'px');
+  });
+
+  previewText.addEventListener('pointerup', ()=>{ drag = false; previewText.classList.remove('dragging'); });
+  previewText.addEventListener('pointerleave', ()=>{ drag = false; previewText.classList.remove('dragging'); });
+
+  window.__fluxo_reset = function(){
+    localStorage.removeItem(EXPORT_KEY_COUNT);
+    localStorage.removeItem(EXPORT_KEY_DATE);
+    localStorage.removeItem(PRO_KEY);
+    alert('Fluxo local storage reset.');
+    location.reload();
+  };
+</script>
+
+</body>
+</html>
